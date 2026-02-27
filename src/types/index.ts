@@ -87,6 +87,7 @@ export interface ChatRequest {
   query: string
   book_slugs?: string[]
   top_k?: number
+  history?: Array<{ role: 'user' | 'assistant'; content: string }>
 }
 
 export interface ChatResponse {
@@ -99,6 +100,12 @@ export interface ChatResponse {
     llm: number
     total: number
   }
+  tokens?: {
+    embedding: number
+    llm_input: number
+    llm_output: number
+  }
+  is_fallback?: boolean
 }
 
 export interface Citation {

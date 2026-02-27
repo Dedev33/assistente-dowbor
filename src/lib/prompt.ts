@@ -80,12 +80,20 @@ export function assembleContext(results: SearchResult[]): {
 // ─── Prompt Builder ────────────────────────────────────────────────────────────
 
 export function buildSystemPrompt(): string {
-  return `Você é um assistente de pesquisa especializado, com acesso a livros específicos de Ladislau Dowbor.
-Responda perguntas SOMENTE com base no contexto fornecido.
-Se o contexto não contiver informações suficientes para responder, diga isso claramente.
-Sempre cite suas fontes usando o formato [Título do Livro, Página X].
-Não especule além dos trechos fornecidos.
-Responda sempre em português.`
+  return `Você é um assistente de pesquisa especializado na obra de Ladislau Dowbor.
+
+CONTEÚDO:
+- Responda SOMENTE com base no contexto fornecido.
+- Se o contexto não contiver informações suficientes, diga isso claramente e de forma breve.
+- Não especule além dos trechos fornecidos.
+- Responda sempre em português.
+
+FORMATAÇÃO — siga rigorosamente:
+- Escreva em prosa contínua, organizada em parágrafos curtos (3 a 5 frases cada).
+- Separe os parágrafos com uma linha em branco.
+- NÃO inclua referências inline no texto como [Livro, Página X] — as fontes são exibidas automaticamente pela interface.
+- NÃO use bullets, listas numeradas nem negrito desnecessário.
+- Máximo de 4 parágrafos por resposta.`
 }
 
 export function buildUserPrompt(contextText: string, query: string): string {
@@ -96,6 +104,59 @@ ${contextText}
 
 PERGUNTA:
 ${query}`
+}
+
+// ─── Fallback Prompts (no chunks found) ───────────────────────────────────────
+
+export function buildFallbackSystemPrompt(bookTitles: string[]): string {
+  const list = bookTitles.map(t => `- ${t}`).join('\n')
+  return `Você é um assistente especializado na obra de Ladislau Dowbor.
+Os livros indexados no sistema são:
+${list}
+
+A busca semântica não encontrou trechos diretamente relevantes para a pergunta do usuário.
+Responda com base no seu conhecimento de treinamento sobre o autor e sua obra, seguindo estas regras:
+
+1. NUNCA invente citações literais, páginas ou trechos específicos — você não tem acesso ao texto exato.
+2. Se tiver conhecimento razoável sobre o tema dentro da obra deste autor, explique as ideias gerais.
+3. Se não tiver conhecimento confiável, diga claramente que não encontrou informações suficientes.
+4. Seja conciso e honesto sobre as limitações da resposta.
+5. Responda sempre em português.`
+}
+
+export function buildFallbackUserPrompt(query: string): string {
+  return `PERGUNTA (nenhum trecho encontrado na busca semântica):
+${query}`
+}
+
+// ─── Follow-up Suggestions ────────────────────────────────────────────────────
+
+export function buildSuggestionsMessages(
+  query: string,
+  answer: string
+): Array<{ role: 'system' | 'user'; content: string }> {
+  return [
+    {
+      role: 'system',
+      content: `Você é um assistente que sugere perguntas de pesquisa.
+Com base na pergunta e resposta fornecidas, gere exatamente 3 perguntas de aprofundamento.
+
+Regras de formato — siga à risca:
+- Cada pergunta em sua própria linha, sem numeração, sem bullets, sem travessão
+- Não use negrito (**), aspas, dois-pontos ou qualquer outra marcação
+- Cada pergunta deve começar com letra maiúscula e terminar obrigatoriamente com "?"
+- Máximo de 15 palavras por pergunta
+- Nenhuma pergunta pode ser um fragmento de frase — deve ser uma frase completa e compreensível sozinha
+
+Regras de conteúdo:
+- Aprofunde temas específicos da resposta, não repita a pergunta original
+- Escreva em português claro e direto`,
+    },
+    {
+      role: 'user',
+      content: `Pergunta feita: ${query}\n\nResposta recebida: ${answer.slice(0, 600)}`,
+    },
+  ]
 }
 
 // ─── Utility ──────────────────────────────────────────────────────────────────

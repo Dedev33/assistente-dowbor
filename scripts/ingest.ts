@@ -19,7 +19,7 @@ import OpenAI from 'openai'
 import pdfParse from 'pdf-parse'
 import { chunkPages, BATCH_SIZE } from '../src/lib/chunker'
 import { cleanPageText } from '../src/lib/chunker'
-import type { RawPage, BookMeta } from '../src/types'
+import type { RawPage } from '../src/types'
 
 // ─── Config ────────────────────────────────────────────────────────────────────
 
@@ -94,19 +94,23 @@ async function main() {
     .eq('is_active', true)
     .single()
 
-  // 3. Parse PDF
+  // 3. Parse PDF — per-page via pagerender callback
   console.log('   Parsing PDF...')
-  const pdfData = await pdfParse(pdfBuffer)
-  const totalPages = pdfData.numpages
+  const perPageTexts: string[] = []
+  await pdfParse(pdfBuffer, {
+    pagerender: (pageData: any) =>
+      pageData.getTextContent().then((content: any) => {
+        const text = content.items.map((item: any) => item.str).join(' ')
+        perPageTexts.push(text)
+        return text
+      }),
+  })
+  const totalPages = perPageTexts.length
 
-  // Extract per-page text
   const pages: RawPage[] = []
-  // pdf-parse gives us full text; we split by page markers if available
-  // For robust page tracking, we parse page by page
-  const pageTexts = pdfData.text.split(/\f/) // form feed = page break
-  for (let i = 0; i < pageTexts.length; i++) {
-    const cleaned = cleanPageText(pageTexts[i])
-    if (cleaned.length > 10) { // skip near-empty pages
+  for (let i = 0; i < perPageTexts.length; i++) {
+    const cleaned = cleanPageText(perPageTexts[i])
+    if (cleaned.length > 10) {
       pages.push({ pageNumber: i + 1, text: cleaned })
     }
   }
@@ -209,7 +213,7 @@ async function main() {
     if (newChunks.length > 0) {
       // Embed new chunks
       const texts = newChunks.map((c) => c.content)
-      const { data: embeddingResponse } = await withRetry(() =>
+      const embeddingResponse = await withRetry(() =>
         openai.embeddings.create({ model: EMBEDDING_MODEL, input: texts, dimensions: EMBEDDING_DIMENSIONS })
       )
 
@@ -253,7 +257,6 @@ async function main() {
       .update({ chunks_processed: processed, chunks_skipped: skipped, last_processed_chunk_index: lastChunkIndex })
       .eq('id', runId)
 
-    const total = resumeFrom + chunksToProcess.length
     const done = resumeFrom + batchStart + batch.length
     const pct = Math.round((done / chunks.length) * 100)
     process.stdout.write(`\r   Progress: ${done}/${chunks.length} chunks (${pct}%) — inserted: ${processed}, skipped: ${skipped}`)

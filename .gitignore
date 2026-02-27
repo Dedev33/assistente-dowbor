@@ -37,6 +37,7 @@ yarn-error.log*
 
 # Books — PDFs may be large and/or proprietary
 books/*.pdf
+public/books/*.pdf
 
 # Supabase local dev
 .supabase/
