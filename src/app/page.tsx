@@ -239,7 +239,7 @@ export default function Home() {
 
       {/* Header */}
       <header className="flex-shrink-0 border-b border-gray-200">
-        <div className="flex items-center justify-between px-8 py-4">
+        <div className="flex items-center justify-between px-4 md:px-8 py-4">
           <a
             href="https://dowbor.org"
             target="_blank"
@@ -263,7 +263,7 @@ export default function Home() {
       <div className="flex flex-1 min-h-0">
 
         {/* Sidebar */}
-        <aside className="w-72 border-r border-gray-200 flex flex-col flex-shrink-0 bg-white">
+        <aside className="hidden md:flex md:w-72 border-r border-gray-200 flex-col flex-shrink-0 bg-white">
           <div className="px-7 pt-8 pb-5">
             <h2
               className="text-2xl leading-tight"
@@ -325,13 +325,13 @@ export default function Home() {
         <div className="flex flex-col flex-1 min-w-0">
 
           {/* Messages */}
-          <main className="flex-1 overflow-y-auto px-10 py-8">
-            <div className="max-w-2xl mx-auto space-y-8">
+          <main className="flex-1 overflow-y-auto px-4 py-6 md:px-10 md:py-8">
+            <div className="max-w-2xl mx-auto space-y-6 md:space-y-8">
 
               {messages.length === 0 && (
-                <div className="py-12">
+                <div className="py-8 md:py-12">
                   <h1
-                    className="text-4xl text-gray-800 mb-3"
+                    className="text-2xl md:text-4xl text-gray-800 mb-3"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
                     O que você quer saber?
@@ -365,7 +365,7 @@ export default function Home() {
                     <div className="flex justify-end">
                       {/* ↑ font size: was text-sm, now text-base */}
                       <div
-                        className="max-w-lg px-5 py-4 text-base text-white leading-relaxed"
+                        className="max-w-[80%] md:max-w-lg px-4 md:px-5 py-4 text-base text-white leading-relaxed"
                         style={{ background: 'var(--dowbor-red)', borderRadius: '4px' }}
                       >
                         {msg.content}
@@ -381,7 +381,7 @@ export default function Home() {
                       ) : (
                         <>
 <div
-                            className="text-base text-gray-800 leading-relaxed max-w-prose text-justify"
+                            className="text-base text-gray-800 leading-relaxed max-w-prose md:text-justify"
                             style={{ fontFamily: 'var(--font-serif)' }}
                           >
                             {renderMarkdown(msg.content, isStreaming && (
@@ -474,7 +474,7 @@ export default function Home() {
           </main>
 
           {/* Input area — full border, larger textarea, real send button */}
-          <footer className="flex-shrink-0 border-t-2 border-gray-200 px-10 py-6 bg-white">
+          <footer className="flex-shrink-0 border-t-2 border-gray-200 px-4 py-4 md:px-10 md:py-6 bg-white">
             <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
               <div
                 className="rounded-lg overflow-hidden border-2 transition-colors"
@@ -495,7 +495,7 @@ export default function Home() {
                 />
                 <div className="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-gray-50">
                   {/* ↑ contrast: was text-xs text-gray-300, now text-sm text-gray-500 */}
-                  <span className="text-sm text-gray-500">
+                  <span className="hidden sm:inline text-sm text-gray-500">
                     Enter para enviar · Shift+Enter para nova linha
                   </span>
                   {/* ↑ real button with background, min-height 44px */}
