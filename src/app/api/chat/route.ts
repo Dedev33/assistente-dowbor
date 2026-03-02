@@ -84,9 +84,11 @@ export async function POST(req: NextRequest) {
         })
 
         // 2a. Fallback — no chunks found, or best match is too weak to be useful
-        // Web content (scraped pages) naturally scores 0.42–0.49; book content scores higher.
-        // 0.42 lets website chunks through while still blocking noise below the original 0.4 threshold.
-        const bestSimilarity = results[0]?.similarity ?? 0
+        // Use the highest similarity across ALL results (vector + keyword) to decide.
+        // Keyword hits carry a synthetic score of 0.45, so if keyword search found something
+        // relevant (e.g. biography chunks for "onde Dowbor nasceu"), RAG is used correctly
+        // even if the vector similarity alone was below the threshold.
+        const bestSimilarity = results.length > 0 ? Math.max(...results.map(r => r.similarity)) : 0
         if (results.length === 0 || bestSimilarity < 0.42) {
           const supabase = getSupabaseAdmin()
           const { data: books } = await supabase
