@@ -79,7 +79,10 @@ function renderMarkdown(text: string, trailing?: React.ReactNode): React.ReactNo
   )
 }
 
-// Slugs that have an actual PDF file in /public/books/
+// Supabase Storage base URL for book PDFs
+const PDF_STORAGE_BASE = 'https://speizjkskrftoutshfyf.supabase.co/storage/v1/object/public/books'
+
+// Slugs that have a PDF in Supabase Storage.
 // Web-scraped and text-based sources are excluded — their "page_number" is a sequential index, not a PDF page.
 const PDF_BOOK_SLUGS = new Set([
   'funcao-social-economia',
@@ -418,7 +421,7 @@ export default function Home() {
                                       <>
                                         {', '}
                                         <a
-                                          href={`/books/${c.book_slug}.pdf#page=${c.page_number}`}
+                                          href={`${PDF_STORAGE_BASE}/${c.book_slug}.pdf#page=${c.page_number}`}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="not-italic underline underline-offset-2 hover:opacity-70 transition-opacity font-semibold"
