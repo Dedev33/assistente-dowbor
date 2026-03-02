@@ -198,8 +198,13 @@ export async function POST(req: NextRequest) {
         const llmLatency = Date.now() - llm_start
         const totalLatency = Date.now() - total_start
 
+        // If the LLM detected the book isn't indexed, override citations to empty
+        // so the UI doesn't show misleading sources from unrelated books.
+        const bookNotAvailable = fullAnswer.includes('não está disponível no sistema')
+
         send(controller, {
           type: 'done',
+          ...(bookNotAvailable ? { citations: [] } : {}),
           latency_ms: {
             embedding: retrievalLatency.embedding,
             retrieval: retrievalLatency.retrieval,

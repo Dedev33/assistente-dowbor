@@ -201,7 +201,8 @@ export default function Home() {
               next[next.length - 1] = {
                 role: 'assistant',
                 content: streamedContent,
-                citations: pendingCitations,
+                // done event may override citations (e.g. when book isn't indexed)
+                citations: event.citations !== undefined ? event.citations : pendingCitations,
                 is_fallback: pendingIsFallback,
                 latency_ms: event.latency_ms,
                 tokens: event.tokens,
