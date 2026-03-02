@@ -80,7 +80,9 @@ export function assembleContext(results: SearchResult[]): {
 // ─── Prompt Builder ────────────────────────────────────────────────────────────
 
 export function buildSystemPrompt(): string {
+  const today = new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })
   return `Você é um assistente de pesquisa especializado na obra de Ladislau Dowbor.
+Data atual: ${today}. Use esta data para contextualizar referências temporais corretamente (ex: um livro de 2025 já foi publicado).
 
 CONTEÚDO:
 - Responda SOMENTE com base no contexto fornecido.
