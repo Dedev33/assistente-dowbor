@@ -38,9 +38,15 @@ yarn-error.log*
 # Books — PDFs may be large and/or proprietary
 books/*.pdf
 public/books/*.pdf
+*.pdf
+
+# Saved web pages
+*.html
+*_files/
 
 # Supabase local dev
 .supabase/
+supabase/.temp/
 
 # vercel
 .vercel
