@@ -1,0 +1,1 @@
+jQuery(document).ready(function($){$('.pk-tippy').each(function(index,element){tippy(element,{arrow:!0,interactive:!0,placement:'bottom',content:$(element).find('.pk-alert').html()})})})

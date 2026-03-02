@@ -1,0 +1,25 @@
+.elementor-26508 .elementor-element.elementor-element-6efe0a0d{overflow:hidden;}.elementor-26508 .elementor-element.elementor-element-6c0ced96{text-align:center;}.elementor-26508 .elementor-element.elementor-element-6c0ced96 img{width:100%;object-position:center center;}.elementor-26508 .elementor-element.elementor-element-6c0ced96 > .elementor-widget-container{border-radius:0px 0px 0px 0px;box-shadow:0px 0px 10px 0px rgba(0,0,0,0.5);}.elementor-26508 .elementor-element.elementor-element-1b8e779a{margin-top:0px;margin-bottom:0px;padding:0px 0px 0px 0px;}.elementor-26508 .elementor-element.elementor-element-542d556b > .elementor-element-populated{margin:35px 0px 0px 0px;--e-column-margin-right:0px;--e-column-margin-left:0px;padding:0px 0px 10px 0px;}.elementor-26508 .elementor-element.elementor-element-3a88aa62{color:var( --e-global-color-text );font-family:var( --e-global-typography-64f58b5-font-family ), Serif;font-size:var( --e-global-typography-64f58b5-font-size );text-transform:var( --e-global-typography-64f58b5-text-transform );line-height:var( --e-global-typography-64f58b5-line-height );letter-spacing:var( --e-global-typography-64f58b5-letter-spacing );word-spacing:var( --e-global-typography-64f58b5-word-spacing );}.elementor-26508 .elementor-element.elementor-element-3a88aa62 > .elementor-widget-container{margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;}.elementor-26508 .elementor-element.elementor-element-157ff63c{margin-top:0px;margin-bottom:0px;}.elementor-26508 .elementor-element.elementor-element-330cb68d > .elementor-element-populated{margin:25px 0px 32px 0px;--e-column-margin-right:0px;--e-column-margin-left:0px;padding:0% 25% 0% 0%;}.elementor-26508 .elementor-element.elementor-element-231d3f2c .elementor-heading-title{color:var( --e-global-color-primary );font-family:var( --e-global-typography-f1b9180-font-family ), Serif;font-size:var( --e-global-typography-f1b9180-font-size );line-height:var( --e-global-typography-f1b9180-line-height );letter-spacing:var( --e-global-typography-f1b9180-letter-spacing );word-spacing:var( --e-global-typography-f1b9180-word-spacing );}@media(max-width:1024px){.elementor-26508 .elementor-element.elementor-element-3a88aa62{font-size:var( --e-global-typography-64f58b5-font-size );line-height:var( --e-global-typography-64f58b5-line-height );letter-spacing:var( --e-global-typography-64f58b5-letter-spacing );word-spacing:var( --e-global-typography-64f58b5-word-spacing );}.elementor-26508 .elementor-element.elementor-element-330cb68d > .elementor-element-populated{padding:0% 5% 0% 0%;}.elementor-26508 .elementor-element.elementor-element-231d3f2c .elementor-heading-title{font-size:var( --e-global-typography-f1b9180-font-size );line-height:var( --e-global-typography-f1b9180-line-height );letter-spacing:var( --e-global-typography-f1b9180-letter-spacing );word-spacing:var( --e-global-typography-f1b9180-word-spacing );}}@media(max-width:767px){.elementor-26508 .elementor-element.elementor-element-3a88aa62{font-size:var( --e-global-typography-64f58b5-font-size );line-height:var( --e-global-typography-64f58b5-line-height );letter-spacing:var( --e-global-typography-64f58b5-letter-spacing );word-spacing:var( --e-global-typography-64f58b5-word-spacing );}.elementor-26508 .elementor-element.elementor-element-330cb68d > .elementor-element-populated{padding:0% 0% 0% 0%;}.elementor-26508 .elementor-element.elementor-element-231d3f2c .elementor-heading-title{font-size:var( --e-global-typography-f1b9180-font-size );line-height:var( --e-global-typography-f1b9180-line-height );letter-spacing:var( --e-global-typography-f1b9180-letter-spacing );word-spacing:var( --e-global-typography-f1b9180-word-spacing );}}/* Start custom CSS for theme-post-featured-image, class: .elementor-element-6c0ced96 */.elementor-26508 .elementor-element.elementor-element-6c0ced96 {
+  overflow: hidden; 
+  border-bottom: 8px solid #B64045;
+  position: relative;
+  cursor: pointer;
+}
+
+.elementor-26508 .elementor-element.elementor-element-6c0ced96 img {
+    margin: auto; 
+    min-width: 100%;
+    min-height: 100%;
+    
+    transition-property: all;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transform: scale(1);
+}
+.elementor-26508 .elementor-element.elementor-element-6c0ced96:hover img {
+  transform: scale(1.05);
+}
+
+.elementor-26508 .elementor-element.elementor-element-6c0ced96 a{
+    width: 100%;
+}/* End custom CSS */
