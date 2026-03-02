@@ -84,10 +84,10 @@ export async function POST(req: NextRequest) {
         })
 
         // 2a. Fallback — no chunks found, or best match is too weak to be useful
-        // Vector matches below 0.5 are tangentially related but don't answer the question;
-        // keyword-only matches have a synthetic score of 0.45 and also fall below this bar.
+        // Web content (scraped pages) naturally scores 0.42–0.49; book content scores higher.
+        // 0.42 lets website chunks through while still blocking noise below the original 0.4 threshold.
         const bestSimilarity = results[0]?.similarity ?? 0
-        if (results.length === 0 || bestSimilarity < 0.5) {
+        if (results.length === 0 || bestSimilarity < 0.42) {
           const supabase = getSupabaseAdmin()
           const { data: books } = await supabase
             .from('books')

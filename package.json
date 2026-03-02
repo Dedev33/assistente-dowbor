@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "ingest": "ts-node --project tsconfig.scripts.json -r tsconfig-paths/register scripts/ingest.ts"
+    "ingest": "ts-node --project tsconfig.scripts.json -r tsconfig-paths/register scripts/ingest.ts",
+    "scrape": "ts-node --project tsconfig.scripts.json -r tsconfig-paths/register scripts/scrape.ts",
+    "ingest-text": "ts-node --project tsconfig.scripts.json -r tsconfig-paths/register scripts/ingest-text.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
+    "cheerio": "^1.2.0",
     "crypto-js": "^4.2.0",
     "gpt-tokenizer": "^3.4.0",
     "next": "16.1.6",

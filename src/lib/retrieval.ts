@@ -19,8 +19,7 @@ const PT_STOP_WORDS = new Set([
   'entre', 'sendo', 'fazer', 'feito', 'dizer', 'disse', 'pode', 'tem',
   'ter', 'ser', 'foi', 'eram', 'está', 'estao', 'são', 'sem', 'muito',
   'ainda', 'pela', 'pelo', 'pelas', 'pelos', 'num', 'numa', 'procure',
-  'busque', 'encontre', 'livro', 'livros', 'texto', 'autor', 'obra',
-  'referencias', 'menção', 'menciona', 'fala', 'diz', 'escreve',
+  'busque', 'encontre', 'texto', 'referencias', 'menciona', 'fala', 'diz', 'escreve',
 ])
 
 /**

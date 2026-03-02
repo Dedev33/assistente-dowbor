@@ -79,6 +79,15 @@ function renderMarkdown(text: string, trailing?: React.ReactNode): React.ReactNo
   )
 }
 
+// Slugs that have an actual PDF file in /public/books/
+// Web-scraped and text-based sources are excluded — their "page_number" is a sequential index, not a PDF page.
+const PDF_BOOK_SLUGS = new Set([
+  'funcao-social-economia',
+  'pao-nosso-cada-dia',
+  'desafios-sistemicos',
+  'tecnologia-do-conhecimento',
+])
+
 // Map slug → cover image path (served from /public/books/covers/)
 const BOOK_COVERS: Record<string, string> = {
   'funcao-social-economia':     '/books/covers/funcao-social-economia.jpg',
@@ -105,7 +114,9 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/books')
       .then(r => r.json())
-      .then(d => setBooks((d.books ?? []).filter((b: Book) => b.is_active)))
+      .then(d => setBooks(
+        (d.books ?? []).filter((b: Book) => b.is_active && PDF_BOOK_SLUGS.has(b.slug))
+      ))
       .catch(() => {})
   }, [])
 
@@ -403,7 +414,7 @@ export default function Home() {
                                   /* ↑ font size: was text-xs, now text-sm. Contrast: was text-gray-500, now text-gray-700. Removed % similarity */
                                   <p key={j} className="text-sm text-gray-700 italic" style={{ fontFamily: 'var(--font-serif)' }}>
                                     {c.book_title}
-                                    {c.page_number ? (
+                                    {c.page_number && PDF_BOOK_SLUGS.has(c.book_slug) ? (
                                       <>
                                         {', '}
                                         <a
