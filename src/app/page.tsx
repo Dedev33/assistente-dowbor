@@ -355,6 +355,9 @@ export default function Home() {
                   <p className="text-base text-gray-600 mb-8">
                     Faça uma pergunta sobre os livros de Ladislau Dowbor
                   </p>
+                  <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-3">
+                    Sugestões
+                  </p>
                   <div className="space-y-1">
                     {SUGGESTIONS.map(s => (
                       <button
