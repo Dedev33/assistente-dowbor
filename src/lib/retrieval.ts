@@ -3,7 +3,7 @@ import { embedQuery } from './openai'
 import type { SearchResult } from '@/types'
 
 const DEFAULT_TOP_K = 5
-const DEFAULT_SIMILARITY_THRESHOLD = 0.4
+const DEFAULT_SIMILARITY_THRESHOLD = 0.25
 const MAX_TOP_K = 10
 
 // Synthetic similarity score assigned to keyword-only matches.
