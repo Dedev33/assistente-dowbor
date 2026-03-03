@@ -1,17 +1,27 @@
 import OpenAI from 'openai'
 
-const apiKey = process.env.OPENAI_API_KEY
-if (!apiKey) throw new Error('Missing OPENAI_API_KEY')
+const openaiApiKey = process.env.OPENAI_API_KEY
+if (!openaiApiKey) throw new Error('Missing OPENAI_API_KEY')
 
-export const openai = new OpenAI({ apiKey })
+const deepseekApiKey = process.env.DEEPSEEK_API_KEY
+if (!deepseekApiKey) throw new Error('Missing DEEPSEEK_API_KEY')
+
+// Embeddings — OpenAI only (vectors stored in Supabase were generated with this model)
+const embeddingsClient = new OpenAI({ apiKey: openaiApiKey })
+
+// Chat completions — DeepSeek V3 (open-source model, OpenAI-compatible API)
+export const openai = new OpenAI({
+  apiKey: deepseekApiKey,
+  baseURL: 'https://api.deepseek.com',
+})
 
 export const EMBEDDING_MODEL = 'text-embedding-3-small'
 export const EMBEDDING_DIMENSIONS = 1536
-export const CHAT_MODEL = 'gpt-4o-mini'
+export const CHAT_MODEL = 'deepseek-chat'
 
 // Embed a single query string. Returns the embedding vector and token count.
 export async function embedQuery(text: string): Promise<{ embedding: number[]; tokens: number }> {
-  const response = await openai.embeddings.create({
+  const response = await embeddingsClient.embeddings.create({
     model: EMBEDDING_MODEL,
     input: text.trim(),
     dimensions: EMBEDDING_DIMENSIONS,
@@ -29,7 +39,7 @@ export async function embedBatch(
 ): Promise<{ embeddings: number[][]; tokens: number }> {
   if (texts.length === 0) return { embeddings: [], tokens: 0 }
 
-  const response = await openai.embeddings.create({
+  const response = await embeddingsClient.embeddings.create({
     model: EMBEDDING_MODEL,
     input: texts.map((t) => t.trim()),
     dimensions: EMBEDDING_DIMENSIONS,
