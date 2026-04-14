@@ -1,27 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { retrieve } from '@/lib/retrieval'
 import { logSearch } from '@/lib/logger'
-import type { SearchRequest, SearchResponse } from '@/types'
+import { validateSearchBody, ValidationError } from '@/lib/validate'
+import { rateLimit, getClientIp } from '@/lib/ratelimit'
+import type { SearchResponse } from '@/types'
 
 export async function POST(req: NextRequest) {
-  const total_start = Date.now()
-
-  let body: SearchRequest
-  try {
-    body = await req.json()
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  const ip = getClientIp(req)
+  if (!rateLimit(ip, 20, 60_000)) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please wait before searching again.' },
+      { status: 429, headers: { 'Retry-After': '60' } }
+    )
   }
 
-  const { query, book_slugs, top_k, similarity_threshold } = body
+  const total_start = Date.now()
 
-  if (!query || typeof query !== 'string' || query.trim().length === 0) {
-    return NextResponse.json({ error: 'query is required and must be a non-empty string' }, { status: 400 })
+  let query: string
+  let book_slugs: string[] | undefined
+  let top_k: number | undefined
+  let similarity_threshold: number | undefined
+
+  try {
+    const raw = await req.json()
+    const validated = validateSearchBody(raw)
+    query = validated.query
+    book_slugs = validated.book_slugs
+    top_k = validated.top_k
+    similarity_threshold = validated.similarity_threshold
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return NextResponse.json({ error: err.message }, { status: 400 })
+    }
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
   try {
     const { results, embeddingTokens, latency } = await retrieve({
-      query: query.trim(),
+      query,
       bookSlugs: book_slugs,
       topK: top_k,
       similarityThreshold: similarity_threshold,
@@ -53,6 +69,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response)
   } catch (err: any) {
     console.error('[/api/search]', err)
-    return NextResponse.json({ error: err.message ?? 'Internal server error' }, { status: 500 })
+    const message = process.env.NODE_ENV === 'development'
+      ? (err.message ?? 'Internal server error')
+      : 'Internal server error'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

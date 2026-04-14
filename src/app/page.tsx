@@ -99,6 +99,14 @@ const BOOK_COVERS: Record<string, string> = {
   'tecnologia-do-conhecimento': '/books/covers/tecnologia-do-conhecimento.jpg',
 }
 
+// Map slug → book page on dowbor.org
+const BOOK_URLS: Record<string, string> = {
+  'funcao-social-economia':     'https://dowbor.org/2022/04/resgatar-a-funcao-social-da-economia-uma-questao-de-dignidade-humana.html',
+  'pao-nosso-cada-dia':         'https://dowbor.org/2015/06/l-dowbor-o-pao-nosso-de-cada-dia-os-processos-produtivos-no-brasil-ed-fundacao-perseu-abramo-sao-paulo-2015144p-isbn-978-85-7643-266-1.html',
+  'desafios-sistemicos':        'https://dowbor.org/2025/08/desafios-sistemicos-na-era-digital-juntando-as-pecas-do-quebra-cabeca.html',
+  'tecnologia-do-conhecimento': 'https://dowbor.org/2013/06/l-dowbor-tecnologias-do-conhecimento-os-desafios-da-educacao-vozes-2013-85p-versao-atualizada.html',
+}
+
 const SUGGESTIONS = [
   'Quais conceitos aparecem transversalmente nos quatro livros?',
   'Como as ideias de Dowbor explicam o endividamento das famílias brasileiras?',
@@ -303,11 +311,15 @@ export default function Home() {
                 {books.map(b => (
                   <li key={b.slug} className="pb-5 border-b border-gray-200 last:border-0 flex gap-3 items-start">
                     {BOOK_COVERS[b.slug] && (
-                      <img
-                        src={BOOK_COVERS[b.slug]}
-                        alt={b.title}
-                        style={{ width: '52px', height: '74px', objectFit: 'cover', flexShrink: 0, boxShadow: '0 2px 6px rgba(0,0,0,0.22)' }}
-                      />
+                      <a href={BOOK_URLS[b.slug]} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0, display: 'block' }}>
+                        <img
+                          src={BOOK_COVERS[b.slug]}
+                          alt={b.title}
+                          style={{ width: '52px', height: '74px', objectFit: 'cover', display: 'block', boxShadow: '0 2px 6px rgba(0,0,0,0.22)', transition: 'opacity 0.15s' }}
+                          onMouseOver={e => (e.currentTarget.style.opacity = '0.8')}
+                          onMouseOut={e => (e.currentTarget.style.opacity = '1')}
+                        />
+                      </a>
                     )}
                     <div className="min-w-0">
                       {/* ↑ font size: was text-sm, now text-base */}

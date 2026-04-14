@@ -1,16 +1,22 @@
-import { NextResponse } from 'next/server'
-import { getSupabaseAdmin } from '@/lib/supabase'
+import { NextRequest, NextResponse } from 'next/server'
+import { getSupabaseClient } from '@/lib/supabase'
+import { rateLimit, getClientIp } from '@/lib/ratelimit'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const ip = getClientIp(req)
+  if (!rateLimit(ip, 30, 60_000)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
   const start = Date.now()
 
   try {
-    const supabase = getSupabaseAdmin()
+    const supabase = getSupabaseClient()
     const { error } = await supabase.from('books').select('id').limit(1)
 
     if (error) {
+      console.error('[/api/health]', error)
       return NextResponse.json(
-        { status: 'error', message: error.message, latency_ms: Date.now() - start },
+        { status: 'error', latency_ms: Date.now() - start },
         { status: 503 }
       )
     }
@@ -21,8 +27,9 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     })
   } catch (err: any) {
+    console.error('[/api/health]', err)
     return NextResponse.json(
-      { status: 'error', message: err.message, latency_ms: Date.now() - start },
+      { status: 'error', latency_ms: Date.now() - start },
       { status: 503 }
     )
   }

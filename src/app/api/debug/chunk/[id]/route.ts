@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (process.env.NODE_ENV !== 'development') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   const { id } = await params
   try {
     const supabase = getSupabaseAdmin()
@@ -16,6 +19,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 
     return NextResponse.json(data)
   } catch (err: any) {
+    console.error('[/api/debug/chunk]', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }

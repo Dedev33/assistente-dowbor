@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+  if (process.env.NODE_ENV !== 'development') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
   const { slug } = await params
   try {
     const supabase = getSupabaseAdmin()
@@ -37,6 +40,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
       ingestion_runs: runs ?? [],
     })
   } catch (err: any) {
+    console.error('[/api/debug/book]', err)
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }

@@ -8,9 +8,11 @@ import {
   buildFallbackUserPrompt,
   buildSuggestionsMessages,
 } from '@/lib/prompt'
-import { openai, CHAT_MODEL } from '@/lib/openai'
+import { getChatClient, CHAT_MODEL } from '@/lib/openai'
 import { logSearch } from '@/lib/logger'
 import { getSupabaseAdmin } from '@/lib/supabase'
+import { validateChatBody, ValidationError } from '@/lib/validate'
+import { rateLimit, getClientIp } from '@/lib/ratelimit'
 import type { ChatRequest } from '@/types'
 
 const encoder = new TextEncoder()
@@ -26,7 +28,7 @@ async function sendSuggestions(
   answer: string
 ) {
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await getChatClient().chat.completions.create({
       model: CHAT_MODEL,
       temperature: 0.7,
       max_tokens: 200,
@@ -52,26 +54,34 @@ async function sendSuggestions(
 }
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req)
+  if (!rateLimit(ip, 10, 60_000)) {
+    return new Response(JSON.stringify({ error: 'Too many requests. Please wait before sending another message.' }), {
+      status: 429,
+      headers: { 'Retry-After': '60' },
+    })
+  }
+
   const total_start = Date.now()
 
-  let body: ChatRequest
+  let query: string
+  let book_slugs: string[] | undefined
+  let top_k: number
+  let recentHistory: { role: 'user' | 'assistant'; content: string }[]
+
   try {
-    body = await req.json()
-  } catch {
+    const raw = await req.json()
+    const validated = validateChatBody(raw)
+    query = validated.query
+    book_slugs = validated.book_slugs
+    top_k = validated.top_k
+    recentHistory = validated.history.slice(-6)
+  } catch (err) {
+    if (err instanceof ValidationError) {
+      return new Response(JSON.stringify({ error: err.message }), { status: 400 })
+    }
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 })
   }
-
-  const { query, book_slugs, top_k, history = [] } = body
-
-  if (!query || typeof query !== 'string' || query.trim().length === 0) {
-    return new Response(
-      JSON.stringify({ error: 'query is required and must be a non-empty string' }),
-      { status: 400 }
-    )
-  }
-
-  // Keep last 3 exchanges (6 messages) as conversation context
-  const recentHistory = history.slice(-6)
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -104,7 +114,7 @@ export async function POST(req: NextRequest) {
           let answerTokens = 0
           let promptTokens = 0
 
-          const completion = await openai.chat.completions.create({
+          const completion = await getChatClient().chat.completions.create({
             model: CHAT_MODEL,
             temperature: 0.1,
             max_tokens: 512,
@@ -172,7 +182,7 @@ export async function POST(req: NextRequest) {
         let promptTokens = 0
         let fullAnswer = ''
 
-        const completion = await openai.chat.completions.create({
+        const completion = await getChatClient().chat.completions.create({
           model: CHAT_MODEL,
           temperature: 0.2,
           max_tokens: 1024,
@@ -235,7 +245,10 @@ export async function POST(req: NextRequest) {
         controller.close()
       } catch (err: any) {
         console.error('[/api/chat]', err)
-        send(controller, { type: 'error', message: err.message ?? 'Internal server error' })
+        const message = process.env.NODE_ENV === 'development'
+          ? (err.message ?? 'Internal server error')
+          : 'Internal server error'
+        send(controller, { type: 'error', message })
         controller.close()
       }
     },
