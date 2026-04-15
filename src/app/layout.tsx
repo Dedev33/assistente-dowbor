@@ -16,7 +16,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Assistente de Pesquisa — Dowbor.org',
-  description: 'Pesquisa semântica nos livros de Ladislau Dowbor',
+  description: 'Pesquisa IA nos livros de Ladislau Dowbor',
 }
 
 export default function RootLayout({

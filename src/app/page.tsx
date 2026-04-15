@@ -343,7 +343,7 @@ export default function Home() {
           <div className="px-7 py-6 border-t border-gray-200">
             {/* ↑ contrast: was text-xs text-gray-400, now text-sm text-gray-600 */}
             <p className="text-sm text-gray-600 leading-relaxed">
-              Pesquisa semântica nos livros disponíveis gratuitamente em dowbor.org
+              Pesquisa IA nos livros disponíveis gratuitamente em dowbor.org
             </p>
           </div>
         </aside>
