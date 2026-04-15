@@ -17,6 +17,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Assistente de Pesquisa — Dowbor.org',
   description: 'Pesquisa IA nos livros de Ladislau Dowbor',
+  openGraph: {
+    title: 'Assistente de Pesquisa — Dowbor.org',
+    description: 'Pesquisa IA nos livros de Ladislau Dowbor',
+    url: 'https://assistente-dowbor.vercel.app',
+    siteName: 'Dowbor.org',
+    locale: 'pt_BR',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
