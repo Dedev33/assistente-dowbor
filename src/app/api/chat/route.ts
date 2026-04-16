@@ -86,7 +86,16 @@ export async function POST(req: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // 1. Retrieve relevant chunks
+        // 1. Fetch active book titles (used in both RAG and fallback system prompts)
+        const supabase = getSupabaseAdmin()
+        const { data: booksData } = await supabase
+          .from('books')
+          .select('title')
+          .eq('is_active', true)
+          .order('title')
+        const bookTitles = (booksData ?? []).map((b: { title: string }) => b.title)
+
+        // 2. Retrieve relevant chunks
         const { results, embeddingTokens, latency: retrievalLatency } = await retrieve({
           query: query.trim(),
           bookSlugs: book_slugs,
@@ -100,13 +109,6 @@ export async function POST(req: NextRequest) {
         // even if the vector similarity alone was below the threshold.
         const bestSimilarity = results.length > 0 ? Math.max(...results.map(r => r.similarity)) : 0
         if (results.length === 0 || bestSimilarity < 0.42) {
-          const supabase = getSupabaseAdmin()
-          const { data: books } = await supabase
-            .from('books')
-            .select('title')
-            .eq('is_active', true)
-            .order('title')
-          const bookTitles = (books ?? []).map((b: { title: string }) => b.title)
 
           send(controller, { type: 'meta', citations: [], is_fallback: true, context_chunks_used: 0 })
 
@@ -189,7 +191,7 @@ export async function POST(req: NextRequest) {
           stream: true,
           stream_options: { include_usage: true },
           messages: [
-            { role: 'system', content: buildSystemPrompt() },
+            { role: 'system', content: buildSystemPrompt(bookTitles) },
             ...recentHistory,
             { role: 'user', content: buildUserPrompt(contextText, query.trim()) },
           ],

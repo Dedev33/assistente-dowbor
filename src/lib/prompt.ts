@@ -79,8 +79,9 @@ export function assembleContext(results: SearchResult[]): {
 
 // ─── Prompt Builder ────────────────────────────────────────────────────────────
 
-export function buildSystemPrompt(): string {
+export function buildSystemPrompt(bookTitles: string[]): string {
   const today = new Date().toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })
+  const bookList = bookTitles.join(', ')
   return `Você é um assistente de pesquisa especializado na obra de Ladislau Dowbor.
 Data atual: ${today}. Use esta data para contextualizar referências temporais corretamente (ex: um livro de 2025 já foi publicado).
 
@@ -92,7 +93,7 @@ CONTEÚDO:
 
 REGRA CRÍTICA — livros não indexados:
 - Cada trecho do contexto vem marcado como "[Source: Título do Livro, Page X]".
-- Se o usuário perguntar sobre um livro específico e NENHUM trecho no contexto vier desse livro, responda apenas: "Este livro não está disponível no sistema. Os livros com conteúdo indexado são: O Pão Nosso de Cada Dia, Resgatar a Função Social da Economia, Desafios Sistêmicos na Era Digital e Tecnologias do Conhecimento."
+- Se o usuário perguntar sobre um livro específico e NENHUM trecho no contexto vier desse livro, responda apenas: "Este livro não está disponível no sistema. Os livros com conteúdo indexado são: ${bookList}."
 - NÃO use trechos de outros livros para inventar uma resposta sobre o livro perguntado.
 
 FORMATAÇÃO — siga rigorosamente:
