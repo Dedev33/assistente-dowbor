@@ -131,9 +131,15 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/books')
       .then(r => r.json())
-      .then(d => setBooks(
-        (d.books ?? []).filter((b: Book) => b.is_active && PDF_BOOK_SLUGS.has(b.slug))
-      ))
+      .then(d => {
+        const filtered = (d.books ?? []).filter((b: Book) => b.is_active && PDF_BOOK_SLUGS.has(b.slug))
+        filtered.sort((a: Book, b: Book) => {
+          if (a.slug === 'desafios-revolucao-digital') return -1
+          if (b.slug === 'desafios-revolucao-digital') return 1
+          return 0
+        })
+        setBooks(filtered)
+      })
       .catch(() => {})
   }, [])
 
