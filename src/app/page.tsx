@@ -375,14 +375,13 @@ export default function Home() {
               {messages.length === 0 && (
                 <div className="py-8 md:py-12">
                   <h1
-                    className="text-2xl md:text-4xl text-gray-800 mb-3"
+                    className="text-2xl md:text-4xl text-gray-800 mb-5"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
                     O que você quer saber?
                   </h1>
-                  {/* ↑ contrast: was text-sm text-gray-400, now text-base text-gray-600 */}
-                  <p className="text-base text-gray-600 mb-8">
-                    Faça uma pergunta sobre os livros de Ladislau Dowbor
+                  <p className="text-base text-gray-600 mb-8" style={{ fontFamily: 'var(--font-serif)', lineHeight: '1.7' }}>
+                    O Assistente IA de Pesquisa foi configurado para explorar o conteúdo de um conjunto de livros selecionados por Ladislau Dowbor. Ele pode ajudar a compreender ideias, localizar argumentos e relacionar temas mas responde apenas com base nestas obras. Perguntas sobre publicações fora deste conjunto de livros estão além do escopo desta ferramenta.
                   </p>
                   <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-3">
                     Sugestões
