@@ -334,17 +334,22 @@ export default function Home() {
                       </a>
                     )}
                     <div className="min-w-0">
-                      {/* ↑ font size: was text-sm, now text-base */}
-                      <p
-                        className="text-base leading-snug text-gray-800 italic"
-                        style={{ fontFamily: 'var(--font-serif)' }}
-                      >
-                        {b.title}
-                      </p>
-                      {/* ↑ contrast: was text-xs text-gray-400, now text-sm text-gray-600 */}
-                      <p className="text-sm text-gray-600 mt-1">
-                        Ladislau Dowbor
-                      </p>
+                      {(() => {
+                        const [mainTitle, subtitle] = b.title.split(/:(.+)/)
+                        return (
+                          <>
+                            <p className="text-sm leading-snug text-gray-800 italic" style={{ fontFamily: 'var(--font-serif)' }}>
+                              {mainTitle.trim()}
+                            </p>
+                            {subtitle && (
+                              <p className="text-xs leading-snug text-gray-500 mt-0.5" style={{ fontFamily: 'var(--font-serif)' }}>
+                                {subtitle.trim()}
+                              </p>
+                            )}
+                          </>
+                        )
+                      })()}
+                      <p className="text-xs text-gray-400 mt-1">Ladislau Dowbor</p>
                     </div>
                   </li>
                 ))}
