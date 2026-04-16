@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Sentinel';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/sentinel-light.woff') format('woff'),
+       url('/fonts/sentinel-light.ttf') format('truetype');
+}
+
 :root {
   --dowbor-red: #B8192D;
   --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sentinel: 'Sentinel', Georgia, serif;
   --font-sans: var(--font-inter), Arial, sans-serif;
 }
 

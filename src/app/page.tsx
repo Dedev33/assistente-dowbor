@@ -380,7 +380,7 @@ export default function Home() {
                   >
                     O que você quer saber?
                   </h1>
-                  <p className="text-base text-gray-600 mb-8" style={{ fontFamily: 'var(--font-serif)', lineHeight: '1.7' }}>
+                  <p className="text-base text-gray-600 mb-8" style={{ fontFamily: 'var(--font-sentinel)', fontStyle: 'italic', lineHeight: '1.75', letterSpacing: '-0.01em' }}>
                     O Assistente IA de Pesquisa foi configurado para explorar o conteúdo de um conjunto de livros selecionados por Ladislau Dowbor. Ele pode ajudar a compreender ideias, localizar argumentos e relacionar temas mas responde apenas com base nestas obras. Perguntas sobre publicações fora deste conjunto de livros estão além do escopo desta ferramenta.
                   </p>
                   <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-3">
