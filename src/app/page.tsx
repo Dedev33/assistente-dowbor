@@ -89,6 +89,7 @@ const PDF_BOOK_SLUGS = new Set([
   'pao-nosso-cada-dia',
   'desafios-sistemicos',
   'tecnologia-do-conhecimento',
+  'desafios-revolucao-digital',
 ])
 
 // Map slug → cover image path (served from /public/books/covers/)
@@ -97,6 +98,7 @@ const BOOK_COVERS: Record<string, string> = {
   'pao-nosso-cada-dia':         '/books/covers/pao-nosso-cada-dia.png',
   'desafios-sistemicos':        '/books/covers/desafios-sistemicos.png',
   'tecnologia-do-conhecimento': '/books/covers/tecnologia-do-conhecimento.jpg',
+  'desafios-revolucao-digital': '/books/covers/desafios-revolucao-digital.png',
 }
 
 // Map slug → book page on dowbor.org
@@ -105,6 +107,7 @@ const BOOK_URLS: Record<string, string> = {
   'pao-nosso-cada-dia':         'https://dowbor.org/2015/06/l-dowbor-o-pao-nosso-de-cada-dia-os-processos-produtivos-no-brasil-ed-fundacao-perseu-abramo-sao-paulo-2015144p-isbn-978-85-7643-266-1.html',
   'desafios-sistemicos':        'https://dowbor.org/2025/08/desafios-sistemicos-na-era-digital-juntando-as-pecas-do-quebra-cabeca.html',
   'tecnologia-do-conhecimento': 'https://dowbor.org/2013/06/l-dowbor-tecnologias-do-conhecimento-os-desafios-da-educacao-vozes-2013-85p-versao-atualizada.html',
+  'desafios-revolucao-digital': 'https://dowbor.org/2024/06/revolucao-digital-uma-sociedade-a-beira-de-rupturas.html',
 }
 
 const SUGGESTIONS = [
