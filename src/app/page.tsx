@@ -374,7 +374,7 @@ export default function Home() {
 
               {messages.length === 0 && (
                 <div className="py-8 md:py-12">
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-sans)' }}>
+                  <h1 className="text-3xl md:text-4xl text-gray-900 mb-4" style={{ fontFamily: 'var(--font-sentinel)', fontWeight: 400, fontStyle: 'normal' }}>
                     Assistente IA de Pesquisa
                   </h1>
                   <p className="text-base md:text-lg text-gray-700 mb-8 text-justify" style={{ fontFamily: 'var(--font-sentinel)', fontStyle: 'italic', lineHeight: '1.75', letterSpacing: '-0.01em' }}>

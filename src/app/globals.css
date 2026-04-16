@@ -9,6 +9,14 @@
        url('/fonts/sentinel-light.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Sentinel';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/sentinel-book.ttf') format('truetype');
+}
+
 :root {
   --dowbor-red: #B8192D;
   --font-serif: var(--font-playfair), Georgia, serif;
