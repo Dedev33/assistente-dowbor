@@ -338,7 +338,7 @@ export default function Home() {
                         const [mainTitle, subtitle] = b.title.split(/:(.+)/)
                         return (
                           <>
-                            <p className="text-sm leading-snug text-gray-800 italic" style={{ fontFamily: 'var(--font-serif)' }}>
+                            <p className="text-sm leading-snug text-gray-800" style={{ fontFamily: 'var(--font-serif)' }}>
                               {mainTitle.trim()}
                             </p>
                             {subtitle && (
