@@ -374,8 +374,11 @@ export default function Home() {
 
               {messages.length === 0 && (
                 <div className="py-8 md:py-12">
-                  <p className="text-xl md:text-2xl text-gray-800 mb-8" style={{ fontFamily: 'var(--font-sentinel)', fontStyle: 'italic', lineHeight: '1.75', letterSpacing: '-0.01em' }}>
-                    O Assistente IA de Pesquisa foi configurado para explorar o conteúdo de um conjunto de livros selecionados por Ladislau Dowbor. Ele pode ajudar a compreender ideias, localizar argumentos e relacionar temas mas responde apenas com base nestas obras. Perguntas sobre publicações fora deste conjunto de livros estão além do escopo desta ferramenta.
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-sans)' }}>
+                    Assistente IA de Pesquisa
+                  </h1>
+                  <p className="text-base md:text-lg text-gray-700 mb-8 text-justify" style={{ fontFamily: 'var(--font-sentinel)', fontStyle: 'italic', lineHeight: '1.75', letterSpacing: '-0.01em' }}>
+                    Esta ferramenta foi configurada para explorar o conteúdo de um conjunto de livros selecionados por Ladislau Dowbor. Ele pode ajudar a compreender ideias, localizar argumentos e relacionar temas mas responde apenas com base nestas obras. Perguntas sobre publicações fora deste conjunto de livros estão além de seu escopo.
                   </p>
                   <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-3">
                     Sugestões
