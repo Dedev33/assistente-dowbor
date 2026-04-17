@@ -423,7 +423,7 @@ export default function Home() {
                     Esta ferramenta foi configurada para explorar o conteúdo de um conjunto de livros selecionados por Ladislau Dowbor. Ele pode ajudar a compreender ideias, localizar argumentos e relacionar temas mas responde apenas com base nestas obras. Perguntas sobre publicações fora deste conjunto de livros estão além de seu escopo.
                   </p>
                   <p className="text-sm font-semibold uppercase tracking-widest text-gray-400 mb-3">
-                    Sugestões
+                    Exemplos
                   </p>
                   <div className="space-y-1">
                     {SUGGESTIONS.map(s => (
