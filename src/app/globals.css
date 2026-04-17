@@ -34,10 +34,11 @@ body {
   font-family: var(--font-serif);
 }
 
-body.font-size-md {
-  font-size: 1.1rem;
+/* Font size accessibility — applied to <html> so rem-based Tailwind classes cascade */
+html.font-size-md {
+  font-size: 112.5%; /* 18px base */
 }
 
-body.font-size-lg {
-  font-size: 1.25rem;
+html.font-size-lg {
+  font-size: 125%; /* 20px base */
 }

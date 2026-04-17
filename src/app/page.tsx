@@ -136,9 +136,9 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    document.body.classList.remove('font-size-md', 'font-size-lg')
-    if (fontScale === 1) document.body.classList.add('font-size-md')
-    if (fontScale === 2) document.body.classList.add('font-size-lg')
+    document.documentElement.classList.remove('font-size-md', 'font-size-lg')
+    if (fontScale === 1) document.documentElement.classList.add('font-size-md')
+    if (fontScale === 2) document.documentElement.classList.add('font-size-lg')
     localStorage.setItem('dowbor-font-size', String(fontScale))
   }, [fontScale])
 
@@ -286,6 +286,32 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-white">
 
+      {/* Accessibility bar */}
+      <div className="flex-shrink-0 flex items-center justify-end gap-1 px-4 md:px-8 bg-gray-100 border-b border-gray-200" style={{ height: '32px', fontFamily: 'var(--font-sans)' }}>
+        <span className="text-xs text-gray-500 mr-1 hidden sm:inline">Tamanho do texto:</span>
+        {([0, 1, 2] as const).map((level, i) => {
+          const labels = ['A-', 'A', 'A+']
+          const active = fontScale === level
+          return (
+            <>
+              {i > 0 && <span key={`sep-${level}`} className="text-gray-300 text-xs select-none">|</span>}
+              <button
+                key={level}
+                onClick={() => setFontScale(level)}
+                title={['Tamanho normal', 'Tamanho médio', 'Tamanho grande'][level]}
+                className="text-xs px-1.5 py-0.5 rounded cursor-pointer bg-transparent border-0 transition-colors hover:opacity-70"
+                style={{
+                  fontWeight: active ? 700 : 400,
+                  color: active ? 'var(--dowbor-red)' : '#6B7280',
+                }}
+              >
+                {labels[level]}
+              </button>
+            </>
+          )
+        })}
+      </div>
+
       {/* Header */}
       <header className="flex-shrink-0 border-b border-gray-200">
         <div className="flex items-center justify-between px-4 md:px-8 py-4">
@@ -298,28 +324,6 @@ export default function Home() {
           >
             DOWBOR.ORG
           </a>
-          {/* Font size accessibility buttons */}
-          <div className="flex items-center gap-2" style={{ fontFamily: 'var(--font-sans)' }}>
-            <button
-              onClick={() => setFontScale(0)}
-              title="Tamanho de fonte normal"
-              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
-              style={{ fontSize: '0.85rem', fontWeight: fontScale === 0 ? 700 : 400, color: fontScale === 0 ? 'var(--dowbor-red)' : '#6B7280' }}
-            >A</button>
-            <button
-              onClick={() => setFontScale(1)}
-              title="Tamanho de fonte médio"
-              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
-              style={{ fontSize: '1rem', fontWeight: fontScale === 1 ? 700 : 400, color: fontScale === 1 ? 'var(--dowbor-red)' : '#6B7280' }}
-            >A</button>
-            <button
-              onClick={() => setFontScale(2)}
-              title="Tamanho de fonte grande"
-              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
-              style={{ fontSize: '1.2rem', fontWeight: fontScale === 2 ? 700 : 400, color: fontScale === 2 ? 'var(--dowbor-red)' : '#6B7280' }}
-            >A</button>
-          </div>
-
           {/* ↑ contrast: was text-gray-400, now text-gray-600 */}
           <button
             className="text-sm tracking-widest uppercase text-gray-600 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0"
