@@ -117,7 +117,7 @@ const SUGGESTIONS = [
   'Quais são os principais desafios sistêmicos do capitalismo contemporâneo segundo Dowbor?',
   'Como Dowbor relaciona desigualdade econômica, financeirização e crise democrática?',
   'O que une os diferentes livros de Dowbor em torno de um projeto alternativo de desenvolvimento?',
-  'Como a revolução digital muda as relações de trabalho e produção?',
+  'Como a revolução digital transforma as relações de trabalho e produção, segundo Dowbor?',
 ]
 
 export default function Home() {
