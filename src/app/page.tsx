@@ -555,6 +555,9 @@ export default function Home() {
                 </div>
               </div>
             </form>
+            <p className="text-xs text-gray-400 text-center mt-3" style={{ fontFamily: 'var(--font-sans)' }}>
+              Versão Beta · Respostas geradas por IA com base nos livros indexados
+            </p>
           </footer>
 
         </div>
