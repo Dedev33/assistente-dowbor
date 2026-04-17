@@ -285,12 +285,14 @@ export default function Home() {
             DOWBOR.ORG
           </a>
           {/* ↑ contrast: was text-gray-400, now text-gray-600 */}
-          <span
-            className="text-sm tracking-widest uppercase text-gray-600"
+          <button
+            className="text-sm tracking-widest uppercase text-gray-600 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0"
             style={{ fontFamily: 'var(--font-sans)' }}
+            title="Voltar ao início"
+            onClick={() => { setMessages([]); setInput(''); window.scrollTo(0, 0) }}
           >
             Assistente de Pesquisa
-          </span>
+          </button>
         </div>
         <div className="h-0.5 w-full" style={{ background: 'var(--dowbor-red)' }} />
       </header>
