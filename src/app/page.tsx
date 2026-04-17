@@ -350,7 +350,7 @@ export default function Home() {
             </h2>
             {/* ↑ contrast: was text-gray-400, now text-gray-600 */}
             <p className="text-sm text-gray-600 mt-1">
-              {books.length} obras indexadas
+              {books.length} obras selecionadas
             </p>
             <div className="mt-3 h-px" style={{ background: 'var(--dowbor-red)' }} />
           </div>
@@ -596,7 +596,7 @@ export default function Home() {
               </div>
             </form>
             <p className="text-xs text-gray-400 text-center mt-3" style={{ fontFamily: 'var(--font-sans)' }}>
-              Versão Beta · Respostas geradas por IA com base nos livros indexados
+              Versão Beta · Respostas geradas por IA com base nos livros selecionados
             </p>
           </footer>
 

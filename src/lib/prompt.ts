@@ -91,9 +91,9 @@ CONTEÚDO:
 - Não especule além dos trechos fornecidos.
 - Responda sempre em português.
 
-REGRA CRÍTICA — livros não indexados:
+REGRA CRÍTICA — livros não selecionados:
 - Cada trecho do contexto vem marcado como "[Source: Título do Livro, Page X]".
-- Se o usuário perguntar sobre um livro específico e NENHUM trecho no contexto vier desse livro, responda apenas: "Este livro não está disponível no sistema. Os livros com conteúdo indexado são: ${bookList}."
+- Se o usuário perguntar sobre um livro específico e NENHUM trecho no contexto vier desse livro, responda apenas: "Este livro não está disponível no sistema. Os livros selecionados são: ${bookList}."
 - NÃO use trechos de outros livros para inventar uma resposta sobre o livro perguntado.
 
 FORMATAÇÃO — siga rigorosamente:
@@ -119,7 +119,7 @@ ${query}`
 export function buildFallbackSystemPrompt(bookTitles: string[]): string {
   const list = bookTitles.map(t => `- ${t}`).join('\n')
   return `Você é um assistente especializado na obra de Ladislau Dowbor.
-Os livros indexados no sistema são:
+Os livros selecionados no sistema são:
 ${list}
 
 A busca semântica não encontrou trechos diretamente relevantes para a pergunta do usuário.
