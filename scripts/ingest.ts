@@ -17,8 +17,7 @@ import { createClient } from '@supabase/supabase-js'
 import OpenAI from 'openai'
 // @ts-ignore — pdf-parse lacks complete type defs
 import pdfParse from 'pdf-parse'
-import { chunkPages, BATCH_SIZE } from '../src/lib/chunker'
-import { cleanPageText } from '../src/lib/chunker'
+import { chunkPages, BATCH_SIZE, cleanPageText, isBoilerplatePage } from '../src/lib/chunker'
 import type { RawPage } from '../src/types'
 
 // ─── Config ────────────────────────────────────────────────────────────────────
@@ -108,13 +107,17 @@ async function main() {
   const totalPages = perPageTexts.length
 
   const pages: RawPage[] = []
+  let skippedBoilerplate = 0
   for (let i = 0; i < perPageTexts.length; i++) {
     const cleaned = cleanPageText(perPageTexts[i])
-    if (cleaned.length > 10) {
-      pages.push({ pageNumber: i + 1, text: cleaned })
+    if (cleaned.length <= 10) continue
+    if (isBoilerplatePage(cleaned)) {
+      skippedBoilerplate++
+      continue
     }
+    pages.push({ pageNumber: i + 1, text: cleaned })
   }
-  console.log(`   Extracted ${pages.length} non-empty pages out of ${totalPages}`)
+  console.log(`   Extracted ${pages.length} content pages out of ${totalPages} (${skippedBoilerplate} boilerplate pages skipped)`)
 
   // 4. Chunk
   console.log('   Chunking...')

@@ -7,6 +7,37 @@ const OVERLAP_TOKENS = 100
 const MIN_CHUNK_TOKENS = 50
 const BATCH_SIZE = 100 // max items per OpenAI embedding batch
 
+// ─── Boilerplate Detection ─────────────────────────────────────────────────────
+
+/**
+ * Returns true for pages that are front/back matter and should NOT be indexed:
+ * covers, copyright pages, table of contents, bibliography, colophon, etc.
+ */
+export function isBoilerplatePage(text: string): boolean {
+  const lower = text.toLowerCase()
+  const wordCount = text.trim().split(/\s+/).length
+
+  // Very short pages are almost always covers, title pages, or dedications
+  if (wordCount < 40) return true
+
+  // Copyright / legal / cataloging pages
+  if (lower.includes('isbn')) return true
+  if (lower.includes('ficha catalográfica')) return true
+  if (lower.includes('catalogação na publicação')) return true
+  if (lower.includes('dados internacionais de catalogação')) return true
+  if (lower.includes('direitos reservados')) return true
+  if (lower.includes('todos os direitos')) return true
+  if (lower.includes('impresso no brasil')) return true
+  if (lower.includes('printed in brazil')) return true
+
+  // Back matter — bibliography section
+  if (/^referências bibliográficas/m.test(lower)) return true
+  if (/^referências$/m.test(lower)) return true
+  if (/^bibliografia$/m.test(lower)) return true
+
+  return false
+}
+
 // ─── Text Cleaning ─────────────────────────────────────────────────────────────
 
 export function cleanPageText(text: string): string {

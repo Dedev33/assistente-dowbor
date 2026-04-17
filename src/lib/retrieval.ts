@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from './supabase'
 import { embedQuery } from './openai'
+import { isBoilerplatePage } from './chunker'
 import type { SearchResult } from '@/types'
 
 const DEFAULT_TOP_K = 5
@@ -142,7 +143,9 @@ export async function retrieve(options: RetrievalOptions): Promise<RetrievalResu
     }))
 
   // 6. Merge: semantic results first (ranked by similarity), keyword results appended
+  // Filter out any boilerplate chunks that slipped through during ingestion
   const results = [...vectorResults, ...keywordResults]
+    .filter(r => !isBoilerplatePage(r.content))
 
   return {
     results,
