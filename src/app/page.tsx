@@ -114,10 +114,10 @@ const BOOK_URLS: Record<string, string> = {
 }
 
 const SUGGESTIONS = [
-  'Quais conceitos aparecem transversalmente nos quatro livros?',
-  'Como as ideias de Dowbor explicam o endividamento das famílias brasileiras?',
-  'Como Dowbor enxerga o crédito como instrumento produtivo?',
-  'A crítica de Dowbor é reformista ou estrutural?',
+  'Quais são os principais desafios sistêmicos do capitalismo contemporâneo segundo Dowbor?',
+  'Como Dowbor relaciona desigualdade econômica, financeirização e crise democrática?',
+  'O que une os diferentes livros de Dowbor em torno de um projeto alternativo de desenvolvimento?',
+  'Como a revolução digital muda as relações de trabalho e produção?',
 ]
 
 export default function Home() {
