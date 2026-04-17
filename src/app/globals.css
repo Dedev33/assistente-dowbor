@@ -33,3 +33,11 @@ body {
 .font-serif {
   font-family: var(--font-serif);
 }
+
+body.font-size-md {
+  font-size: 1.1rem;
+}
+
+body.font-size-lg {
+  font-size: 1.25rem;
+}

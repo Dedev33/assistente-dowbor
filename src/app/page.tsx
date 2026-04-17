@@ -125,8 +125,22 @@ export default function Home() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [books, setBooks] = useState<Book[]>([])
+  const [fontScale, setFontScale] = useState<0 | 1 | 2>(0)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  // Restore font scale from localStorage and keep body class in sync
+  useEffect(() => {
+    const saved = localStorage.getItem('dowbor-font-size')
+    if (saved === '1' || saved === '2') setFontScale(saved === '1' ? 1 : 2)
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.remove('font-size-md', 'font-size-lg')
+    if (fontScale === 1) document.body.classList.add('font-size-md')
+    if (fontScale === 2) document.body.classList.add('font-size-lg')
+    localStorage.setItem('dowbor-font-size', String(fontScale))
+  }, [fontScale])
 
   useEffect(() => {
     fetch('/api/books')
@@ -284,6 +298,28 @@ export default function Home() {
           >
             DOWBOR.ORG
           </a>
+          {/* Font size accessibility buttons */}
+          <div className="flex items-center gap-2" style={{ fontFamily: 'var(--font-sans)' }}>
+            <button
+              onClick={() => setFontScale(0)}
+              title="Tamanho de fonte normal"
+              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
+              style={{ fontSize: '0.85rem', fontWeight: fontScale === 0 ? 700 : 400, color: fontScale === 0 ? 'var(--dowbor-red)' : '#6B7280' }}
+            >A</button>
+            <button
+              onClick={() => setFontScale(1)}
+              title="Tamanho de fonte médio"
+              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
+              style={{ fontSize: '1rem', fontWeight: fontScale === 1 ? 700 : 400, color: fontScale === 1 ? 'var(--dowbor-red)' : '#6B7280' }}
+            >A</button>
+            <button
+              onClick={() => setFontScale(2)}
+              title="Tamanho de fonte grande"
+              className="transition-opacity hover:opacity-60 cursor-pointer bg-transparent border-0 p-0 leading-none"
+              style={{ fontSize: '1.2rem', fontWeight: fontScale === 2 ? 700 : 400, color: fontScale === 2 ? 'var(--dowbor-red)' : '#6B7280' }}
+            >A</button>
+          </div>
+
           {/* ↑ contrast: was text-gray-400, now text-gray-600 */}
           <button
             className="text-sm tracking-widest uppercase text-gray-600 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0"
