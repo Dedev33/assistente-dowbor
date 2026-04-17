@@ -63,7 +63,7 @@ export function assembleContext(results: SearchResult[]): {
   // 5. Build citations (unique pages per book)
   // Internal reference sources (e.g. biographical data) are used for RAG context
   // but intentionally hidden from the user-facing citations list.
-  const HIDDEN_CITATION_SLUGS = new Set(['dowbor-bio'])
+  const HIDDEN_CITATION_SLUGS = new Set(['dowbor-bio', 'dowbor-books'])
 
   const citationMap = new Map<string, Citation>()
   for (const chunk of usedChunks) {
