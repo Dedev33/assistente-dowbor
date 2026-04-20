@@ -141,18 +141,7 @@ export async function POST(req: NextRequest) {
           const llmLatency = Date.now() - llm_start
           const totalLatency = Date.now() - total_start
 
-          send(controller, {
-            type: 'done',
-            latency_ms: {
-              embedding: retrievalLatency.embedding,
-              retrieval: retrievalLatency.retrieval,
-              llm: llmLatency,
-              total: totalLatency,
-            },
-            tokens: { embedding: embeddingTokens, llm_input: promptTokens, llm_output: answerTokens },
-          })
-
-          logSearch({
+          const logId = await logSearch({
             query_text: query.trim(),
             book_ids_filter: book_slugs ?? null,
             results_count: 0,
@@ -163,6 +152,18 @@ export async function POST(req: NextRequest) {
             latency_total_ms: totalLatency,
             llm_model: CHAT_MODEL,
             answer_tokens: answerTokens,
+          })
+
+          send(controller, {
+            type: 'done',
+            log_id: logId,
+            latency_ms: {
+              embedding: retrievalLatency.embedding,
+              retrieval: retrievalLatency.retrieval,
+              llm: llmLatency,
+              total: totalLatency,
+            },
+            tokens: { embedding: embeddingTokens, llm_input: promptTokens, llm_output: answerTokens },
           })
 
           controller.close()
@@ -216,19 +217,7 @@ export async function POST(req: NextRequest) {
         // so the UI doesn't show misleading sources from unrelated books.
         const bookNotAvailable = fullAnswer.includes('não está disponível no sistema')
 
-        send(controller, {
-          type: 'done',
-          ...(bookNotAvailable ? { citations: [] } : {}),
-          latency_ms: {
-            embedding: retrievalLatency.embedding,
-            retrieval: retrievalLatency.retrieval,
-            llm: llmLatency,
-            total: totalLatency,
-          },
-          tokens: { embedding: embeddingTokens, llm_input: promptTokens, llm_output: answerTokens },
-        })
-
-        logSearch({
+        const logId = await logSearch({
           query_text: query.trim(),
           book_ids_filter: book_slugs ?? null,
           results_count: usedChunks.length,
@@ -239,6 +228,19 @@ export async function POST(req: NextRequest) {
           latency_total_ms: totalLatency,
           llm_model: CHAT_MODEL,
           answer_tokens: answerTokens,
+        })
+
+        send(controller, {
+          type: 'done',
+          log_id: logId,
+          ...(bookNotAvailable ? { citations: [] } : {}),
+          latency_ms: {
+            embedding: retrievalLatency.embedding,
+            retrieval: retrievalLatency.retrieval,
+            llm: llmLatency,
+            total: totalLatency,
+          },
+          tokens: { embedding: embeddingTokens, llm_input: promptTokens, llm_output: answerTokens },
         })
 
         // Generate follow-up suggestions after the main answer is done

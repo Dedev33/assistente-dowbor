@@ -13,12 +13,14 @@ interface SearchLogEntry {
   answer_tokens?: number
 }
 
-export async function logSearch(entry: SearchLogEntry): Promise<void> {
+export async function logSearch(entry: SearchLogEntry): Promise<string | null> {
   try {
     const supabase = getSupabaseAdmin()
-    await supabase.from('search_logs').insert(entry)
+    const { data } = await supabase.from('search_logs').insert(entry).select('id').single()
+    return data?.id ?? null
   } catch (err) {
     // Logging must never crash the request
     console.error('[logger] Failed to write search log:', err)
+    return null
   }
 }

@@ -25,6 +25,8 @@ interface Message {
   is_fallback?: boolean
   suggestions?: string[]
   error?: boolean
+  log_id?: string
+  feedback?: 'up' | 'down'
 }
 
 // Render **bold** inline only — used for single-line contexts like suggestion buttons
@@ -240,6 +242,7 @@ export default function Home() {
                 is_fallback: pendingIsFallback,
                 latency_ms: event.latency_ms,
                 tokens: event.tokens,
+                log_id: event.log_id ?? undefined,
               }
               return next
             })
@@ -274,6 +277,25 @@ export default function Home() {
     if (!query) return
     setInput('')
     doChat(query)
+  }
+
+  async function handleFeedback(msgIndex: number, vote: 'up' | 'down') {
+    const msg = messages[msgIndex]
+    if (!msg.log_id || msg.feedback) return
+    setMessages(prev => {
+      const next = [...prev]
+      next[msgIndex] = { ...next[msgIndex], feedback: vote }
+      return next
+    })
+    try {
+      await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ log_id: msg.log_id, feedback: vote }),
+      })
+    } catch {
+      // silently ignore — feedback is best-effort
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -507,6 +529,28 @@ export default function Home() {
                               </div>
                             </div>
                           )}
+                          {msg.log_id && (
+                            <div className="mt-4 flex items-center gap-3" style={{ fontFamily: 'var(--font-sans)' }}>
+                              <span className="text-xs text-gray-400">Esta resposta foi útil?</span>
+                              {msg.feedback ? (
+                                <span className="text-xs text-gray-400">Obrigado pelo feedback.</span>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => handleFeedback(i, 'up')}
+                                    title="Resposta útil"
+                                    className="text-lg leading-none cursor-pointer bg-transparent border-0 p-0 hover:scale-110 transition-transform"
+                                  >👍</button>
+                                  <button
+                                    onClick={() => handleFeedback(i, 'down')}
+                                    title="Resposta não útil"
+                                    className="text-lg leading-none cursor-pointer bg-transparent border-0 p-0 hover:scale-110 transition-transform"
+                                  >👎</button>
+                                </>
+                              )}
+                            </div>
+                          )}
+
                           {msg.suggestions && msg.suggestions.length > 0 && (
                             <div className="mt-5 pt-4 border-t border-gray-200">
                               <p className="text-sm font-semibold uppercase tracking-widest text-gray-500 mb-3">
