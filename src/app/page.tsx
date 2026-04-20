@@ -128,6 +128,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [books, setBooks] = useState<Book[]>([])
   const [fontScale, setFontScale] = useState<0 | 1 | 2>(0)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const touchStartX = useRef<number | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -360,6 +362,108 @@ export default function Home() {
       </header>
 
       <div className="flex flex-1 min-h-0">
+
+        {/* Mobile drawer tab — fixed handle on left edge, hidden on desktop */}
+        <button
+          className="md:hidden fixed left-0 z-40 flex items-center justify-center bg-white border border-l-0 border-gray-200 shadow-md cursor-pointer"
+          style={{
+            top: '50%', transform: 'translateY(-50%)',
+            width: '20px', height: '72px',
+            borderRadius: '0 8px 8px 0',
+            writingMode: 'vertical-rl',
+            fontSize: '9px',
+            letterSpacing: '0.12em',
+            fontFamily: 'var(--font-sans)',
+            color: 'var(--dowbor-red)',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+          }}
+          onClick={() => setDrawerOpen(true)}
+          aria-label="Ver lista de livros"
+        >
+          Livros
+        </button>
+
+        {/* Mobile drawer overlay + panel */}
+        {drawerOpen && (
+          <div className="md:hidden fixed inset-0 z-50 flex">
+            {/* Dark overlay — tap to close */}
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setDrawerOpen(false)}
+            />
+            {/* Panel */}
+            <div
+              className="relative flex flex-col bg-white shadow-2xl overflow-hidden"
+              style={{ width: '85vw', maxWidth: '360px', height: '100%' }}
+              onTouchStart={e => { touchStartX.current = e.touches[0].clientX }}
+              onTouchEnd={e => {
+                if (touchStartX.current !== null && touchStartX.current - e.changedTouches[0].clientX > 60) {
+                  setDrawerOpen(false)
+                }
+                touchStartX.current = null
+              }}
+            >
+              {/* Drawer header */}
+              <div className="px-6 pt-7 pb-4 flex items-start justify-between flex-shrink-0">
+                <div>
+                  <h2 className="text-2xl leading-tight" style={{ fontFamily: 'var(--font-serif)' }}>Livros</h2>
+                  <p className="text-sm text-gray-600 mt-1">{books.length} obras selecionadas</p>
+                  <div className="mt-3 h-px" style={{ background: 'var(--dowbor-red)' }} />
+                </div>
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="text-gray-400 hover:text-gray-700 bg-transparent border-0 p-1 cursor-pointer text-xl leading-none ml-4 mt-1"
+                  aria-label="Fechar"
+                >✕</button>
+              </div>
+
+              {/* Book list */}
+              <div className="flex-1 overflow-y-auto px-6">
+                {books.length === 0 ? (
+                  <p className="text-base text-gray-500 italic" style={{ fontFamily: 'var(--font-serif)' }}>Carregando...</p>
+                ) : (
+                  <ul className="space-y-5">
+                    {books.map(b => (
+                      <li key={b.slug} className="pb-5 border-b border-gray-200 last:border-0 flex gap-3 items-start">
+                        {BOOK_COVERS[b.slug] && (
+                          <a href={BOOK_URLS[b.slug]} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0 }}>
+                            <img
+                              src={BOOK_COVERS[b.slug]}
+                              alt={b.title}
+                              style={{ width: '52px', height: '74px', objectFit: 'cover', display: 'block', boxShadow: '0 2px 6px rgba(0,0,0,0.22)' }}
+                            />
+                          </a>
+                        )}
+                        <div className="min-w-0">
+                          {(() => {
+                            const [mainTitle, subtitle] = b.title.split(/:(.+)/)
+                            return (
+                              <>
+                                <p className="text-sm leading-snug text-gray-800" style={{ fontFamily: 'var(--font-serif)' }}>{mainTitle.trim()}</p>
+                                {subtitle && (
+                                  <p className="text-xs leading-snug text-gray-500 mt-0.5" style={{ fontFamily: 'var(--font-serif)' }}>{subtitle.trim()}</p>
+                                )}
+                              </>
+                            )
+                          })()}
+                          <p className="text-xs text-gray-400 mt-1">Ladislau Dowbor</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Drawer footer */}
+              <div className="px-6 py-5 border-t border-gray-200 flex-shrink-0">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  Pesquisa IA nos livros disponíveis gratuitamente em dowbor.org
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Sidebar */}
         <aside className="hidden md:flex md:w-72 border-r border-gray-200 flex-col flex-shrink-0 bg-white">
