@@ -3,19 +3,50 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
-  Message, Citation,
-  PDF_STORAGE_BASE, PDF_BOOK_SLUGS,
+  Book, Message, Citation,
+  PDF_STORAGE_BASE, PDF_BOOK_SLUGS, BOOK_COVERS, BOOK_URLS,
   renderMarkdown, renderInline,
 } from '@/lib/chat-shared'
+
+const FULL_URL = 'https://assistente-dowbor.vercel.app'
 
 export default function EmbedChat() {
   const searchParams = useSearchParams()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [books, setBooks] = useState<Book[]>([])
+  const [fontScale, setFontScale] = useState<0 | 1 | 2>(0)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const autoSubmitted = useRef(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('dowbor-font-size')
+    if (saved === '1' || saved === '2') setFontScale(saved === '1' ? 1 : 2)
+  }, [])
+
+  useEffect(() => {
+    document.documentElement.classList.remove('font-size-md', 'font-size-lg')
+    if (fontScale === 1) document.documentElement.classList.add('font-size-md')
+    if (fontScale === 2) document.documentElement.classList.add('font-size-lg')
+    localStorage.setItem('dowbor-font-size', String(fontScale))
+  }, [fontScale])
+
+  useEffect(() => {
+    fetch('/api/books')
+      .then(r => r.json())
+      .then(d => {
+        const filtered = (d.books ?? []).filter((b: Book) => b.is_active && PDF_BOOK_SLUGS.has(b.slug))
+        filtered.sort((a: Book, b: Book) => {
+          if (a.slug === 'desafios-revolucao-digital') return -1
+          if (b.slug === 'desafios-revolucao-digital') return 1
+          return 0
+        })
+        setBooks(filtered)
+      })
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -120,7 +151,6 @@ export default function EmbedChat() {
     }
   }
 
-  // Auto-submit the ?q= param once on mount
   useEffect(() => {
     const q = searchParams.get('q')?.trim()
     if (q && !autoSubmitted.current) {
@@ -170,25 +200,60 @@ export default function EmbedChat() {
   return (
     <div className="flex flex-col h-screen bg-white" style={{ fontFamily: 'var(--font-sans)' }}>
 
-      {/* Compact header */}
+      {/* Header */}
       <header className="flex-shrink-0 border-b border-gray-200">
-        <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center justify-between gap-2 px-4 py-2.5">
           <a
             href="https://dowbor.org"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-bold tracking-widest uppercase"
+            className="text-xs font-bold tracking-widest uppercase flex-shrink-0"
             style={{ color: 'var(--dowbor-red)' }}
           >
             DOWBOR.ORG
           </a>
-          <button
-            className="text-xs tracking-widest uppercase text-gray-600 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0"
-            onClick={() => { setMessages([]); setInput('') }}
-            title="Voltar ao início"
-          >
-            Assistente de Pesquisa
-          </button>
+
+          <div className="flex items-center gap-3 ml-auto">
+            {/* Font size controls */}
+            <div className="flex items-center gap-0.5">
+              {([0, 1, 2] as const).map((level, i) => (
+                <span key={level} className="flex items-center">
+                  {i > 0 && <span className="text-gray-300 text-xs mx-0.5 select-none">|</span>}
+                  <button
+                    onClick={() => setFontScale(level)}
+                    title={['Tamanho normal', 'Tamanho médio', 'Tamanho grande'][level]}
+                    className="text-xs px-1 py-0.5 cursor-pointer bg-transparent border-0 transition-colors hover:opacity-70"
+                    style={{
+                      fontWeight: fontScale === level ? 700 : 400,
+                      color: fontScale === level ? 'var(--dowbor-red)' : '#9CA3AF',
+                    }}
+                  >
+                    {['A-', 'A', 'A+'][level]}
+                  </button>
+                </span>
+              ))}
+            </div>
+
+            {/* Link to full platform */}
+            <a
+              href={FULL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-gray-500 hover:opacity-70 transition-opacity whitespace-nowrap"
+              title="Abrir versão completa"
+            >
+              Versão completa ↗
+            </a>
+
+            {/* Reset button */}
+            <button
+              className="text-xs tracking-widest uppercase text-gray-400 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0 hidden sm:block"
+              onClick={() => { setMessages([]); setInput('') }}
+              title="Voltar ao início"
+            >
+              Assistente de Pesquisa
+            </button>
+          </div>
         </div>
         <div className="h-0.5 w-full" style={{ background: 'var(--dowbor-red)' }} />
       </header>
@@ -198,10 +263,72 @@ export default function EmbedChat() {
         <div className="max-w-2xl mx-auto space-y-5">
 
           {messages.length === 0 && (
-            <div className="py-8 text-center">
-              <p className="text-base text-gray-500 italic" style={{ fontFamily: 'var(--font-serif)' }}>
-                Digite sua pergunta sobre os livros de Ladislau Dowbor.
+            <div className="py-4">
+              <h1 className="text-2xl text-gray-900 mb-2" style={{ fontFamily: 'var(--font-sentinel)', fontWeight: 400 }}>
+                Assistente IA de Pesquisa
+              </h1>
+              <p className="text-sm text-gray-600 mb-5 text-justify leading-relaxed" style={{ fontFamily: 'var(--font-sentinel)', fontStyle: 'italic' }}>
+                Explore o conteúdo de obras selecionadas por Ladislau Dowbor. Digite sua pergunta abaixo.
               </p>
+
+              {/* Book covers */}
+              {books.length > 0 && (
+                <div className="mb-5">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
+                    {books.length} obras indexadas
+                  </p>
+                  <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
+                    {books.map(b => (
+                      <a
+                        key={b.slug}
+                        href={BOOK_URLS[b.slug]}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={b.title}
+                        style={{ flexShrink: 0 }}
+                      >
+                        {BOOK_COVERS[b.slug] ? (
+                          <img
+                            src={BOOK_COVERS[b.slug]}
+                            alt={b.title}
+                            style={{
+                              width: '56px',
+                              height: '80px',
+                              objectFit: 'cover',
+                              display: 'block',
+                              boxShadow: '0 2px 8px rgba(0,0,0,0.22)',
+                              transition: 'opacity 0.15s',
+                            }}
+                            onMouseOver={e => (e.currentTarget.style.opacity = '0.8')}
+                            onMouseOut={e => (e.currentTarget.style.opacity = '1')}
+                          />
+                        ) : null}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-2">
+                Exemplos
+              </p>
+              <div className="space-y-1">
+                {[
+                  'Quais são os principais desafios sistêmicos do capitalismo contemporâneo segundo Dowbor?',
+                  'Como Dowbor relaciona desigualdade econômica, financeirização e crise democrática?',
+                  'Como a revolução digital transforma as relações de trabalho e produção, segundo Dowbor?',
+                ].map(s => (
+                  <button
+                    key={s}
+                    onClick={() => { setInput(s); inputRef.current?.focus() }}
+                    className="block w-full text-left text-sm text-gray-700 py-3 px-3 border-b border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    style={{ fontFamily: 'var(--font-serif)' }}
+                  >
+                    <span className="mr-2 font-bold" style={{ color: 'var(--dowbor-red)' }}>→</span>
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
