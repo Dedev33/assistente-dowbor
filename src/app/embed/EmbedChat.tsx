@@ -18,6 +18,7 @@ export default function EmbedChat() {
   const [books, setBooks] = useState<Book[]>([])
   const [fontScale, setFontScale] = useState<0 | 1 | 2>(0)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const autoSubmitted = useRef(false)
 
@@ -49,7 +50,9 @@ export default function EmbedChat() {
   }, [])
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
   }, [messages, loading])
 
   async function doChat(query: string) {
@@ -259,7 +262,7 @@ export default function EmbedChat() {
       </header>
 
       {/* Messages */}
-      <main className="flex-1 overflow-y-auto px-4 py-4">
+      <main ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4">
         <div className="max-w-2xl mx-auto space-y-5">
 
           {messages.length === 0 && (
