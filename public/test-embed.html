@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teste de Integração – Simulação WordPress</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f0;
+      color: #1a1a1a;
+    }
+
+    /* Simulated WordPress page */
+    .wp-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .wp-section {
+      display: flex;
+      gap: 48px;
+      align-items: flex-start;
+      background: white;
+      padding: 48px;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .wp-text { flex: 1; }
+    .wp-text h2 { font-size: 1.8rem; margin-bottom: 16px; line-height: 1.3; }
+    .wp-text p  { font-size: 1rem; line-height: 1.7; color: #444; margin-bottom: 16px; }
+
+    .wp-image {
+      flex-shrink: 0;
+      width: 260px;
+    }
+    .wp-image img {
+      width: 100%;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+
+    /* Assistente widget inside the WP section */
+    .assistente-widget {
+      margin-top: 28px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .assistente-widget:focus-within {
+      border-color: #B8192D;
+    }
+
+    .widget-input-row {
+      display: flex;
+      align-items: stretch;
+    }
+    .widget-input-row textarea {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-family: Georgia, serif;
+      border: none;
+      outline: none;
+      resize: none;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: white;
+    }
+    .widget-input-row textarea::placeholder { color: #9ca3af; }
+
+    .widget-send-btn {
+      background: #B8192D;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+      font-family: -apple-system, sans-serif;
+    }
+    .widget-send-btn:hover { opacity: 0.85; }
+
+    .widget-hint {
+      padding: 6px 14px;
+      font-size: 0.72rem;
+      color: #9ca3af;
+      background: #f9fafb;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      width: 100%;
+      max-width: 860px;
+      height: 90vh;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      z-index: 10;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #374151;
+      line-height: 1;
+      transition: background 0.15s;
+    }
+    .modal-close:hover { background: #f3f4f6; }
+
+    .modal-box iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    /* Label chip */
+    .test-label {
+      display: inline-block;
+      background: #B8192D;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .wp-section { flex-direction: column; padding: 24px; }
+      .wp-image { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wp-page">
+
+  <p style="font-size:0.8rem;color:#999;margin-bottom:20px;text-align:center">
+    ↓ Simulação da página WordPress — o conteúdo abaixo reproduz o comportamento esperado da integração ↓
+  </p>
+
+  <div class="wp-section">
+    <div class="wp-text">
+      <span class="test-label">Teste de Integração</span>
+      <h2>Desafios da Revolução Digital</h2>
+      <p>
+        Neste livro, Ladislau Dowbor analisa as transformações geradas pela revolução digital,
+        explorando seus impactos nas relações de trabalho, produção e democracia.
+        Uma leitura essencial para compreender a economia contemporânea.
+      </p>
+      <p>
+        Use o assistente abaixo para explorar o conteúdo do livro com inteligência artificial.
+        Digite sua pergunta e clique em <strong>Perguntar</strong> — o assistente abrirá e já
+        buscará a resposta nos textos do professor Dowbor.
+      </p>
+
+      <!-- Widget do assistente -->
+      <div class="assistente-widget">
+        <div class="widget-input-row">
+          <textarea
+            id="widget-question"
+            rows="2"
+            placeholder="Ex: Como a revolução digital afeta o trabalho?"
+          ></textarea>
+          <button class="widget-send-btn" onclick="openAssistente()">
+            Perguntar →
+          </button>
+        </div>
+        <div class="widget-hint">Pressione Enter ou clique em Perguntar para abrir o assistente</div>
+      </div>
+    </div>
+
+    <div class="wp-image">
+      <img src="https://assistente-dowbor.vercel.app/books/covers/desafios-revolucao-digital.png"
+           alt="Capa do livro Desafios da Revolução Digital"
+           onerror="this.style.background='#f0f0f0';this.style.height='360px'" />
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" title="Fechar">✕</button>
+    <iframe id="embed-iframe" src="" title="Assistente de Pesquisa Dowbor" allow="clipboard-write"></iframe>
+  </div>
+</div>
+
+<script>
+  const EMBED_BASE = 'https://assistente-dowbor.vercel.app/embed'
+
+  const textarea = document.getElementById('widget-question')
+  const modal    = document.getElementById('modal')
+  const iframe   = document.getElementById('embed-iframe')
+
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      openAssistente()
+    }
+  })
+
+  function openAssistente() {
+    const q = textarea.value.trim()
+    const url = q
+      ? EMBED_BASE + '?q=' + encodeURIComponent(q)
+      : EMBED_BASE
+    iframe.src = url
+    modal.classList.add('open')
+    document.body.style.overflow = 'hidden'
+  }
+
+  function closeModal() {
+    modal.classList.remove('open')
+    iframe.src = ''
+    document.body.style.overflow = ''
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === modal) closeModal()
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal()
+  })
+</script>
+
+</body>
+</html>
