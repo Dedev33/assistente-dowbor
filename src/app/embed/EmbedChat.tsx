@@ -49,7 +49,7 @@ export default function EmbedChat() {
   }, [])
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
   }, [messages, loading])
 
   async function doChat(query: string) {
