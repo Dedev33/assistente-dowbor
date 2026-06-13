@@ -1013,8 +1013,7 @@ li.elementor-sitemap-item.elementor-sitemap-item-post_newsletter {
 <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-30480"><a href="https://dowbor.org/category/interesses/bons-filmes" class="elementor-item">Bons Filmes</a></li>
 <li class="menu-item menu-item-type-post_type_archive menu-item-object-bons-sites menu-item-28972"><a href="https://dowbor.org/bons-sites" class="elementor-item">Bons Sites</a></li>
 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-38912"><a href="https://dowbor.org/dicas-de-leitura" class="elementor-item">Dicas de Leitura</a></li>
-</ul>			
-						<p style="margin:8px 0 0 0;padding:0;"><a href="https://assistente-dowbor.vercel.app" target="_blank" style="font-size:14px;color:#333;text-decoration:none;">Assistente IA de Pesquisa</a></p></nav>
+</ul></nav>
 						<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
 				<ul id="menu-2-54d016d" class="elementor-nav-menu sm-vertical"><li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-30959"><a href="https://dowbor.org/category/interesses/happy-hour" class="elementor-item" tabindex="-1">Happy Hour</a></li>
 <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-30480"><a href="https://dowbor.org/category/interesses/bons-filmes" class="elementor-item" tabindex="-1">Bons Filmes</a></li>
@@ -5424,6 +5423,40 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
 
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"0281d8ae14504021953cd9fbcea85d9d","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+
+<script>
+(function() {
+  function injectLink() {
+    var injected = false;
+    document.querySelectorAll('.elementor-nav-menu.sm-vertical').forEach(function(ul) {
+      var links = ul.querySelectorAll('a');
+      var hasDicas = Array.from(links).some(function(a) {
+        return a.textContent.trim() === 'Dicas de Leitura';
+      });
+      if (hasDicas && !injected) {
+        var li = document.createElement('li');
+        li.className = 'menu-item';
+        var a = document.createElement('a');
+        a.href = 'https://assistente-dowbor.vercel.app';
+        a.className = 'elementor-item';
+        a.target = '_blank';
+        a.textContent = 'Assistente IA de Pesquisa';
+        li.appendChild(a);
+        ul.appendChild(li);
+        injected = true;
+      }
+    });
+  }
+  // Run after all scripts have had a chance to build the menu
+  if (document.readyState === 'complete') {
+    injectLink();
+  } else {
+    window.addEventListener('load', injectLink);
+  }
+  // Fallback: also run after a short delay in case of deferred JS
+  setTimeout(injectLink, 800);
+})();
+</script>
 </body>
 
 <!-- Mirrored from dowbor.org/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 12 Jun 2026 15:03:44 GMT -->
