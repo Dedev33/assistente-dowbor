@@ -158,7 +158,7 @@ export default function EmbedChat() {
     const q = searchParams.get('q')?.trim()
     if (q && !autoSubmitted.current) {
       autoSubmitted.current = true
-      doChat(q)
+      window.open(`${FULL_URL}?q=${encodeURIComponent(q)}`, '_blank')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -182,22 +182,22 @@ export default function EmbedChat() {
     }
   }
 
+  function openFullApp(query: string) {
+    if (!query) return
+    setInput('')
+    window.open(`${FULL_URL}?q=${encodeURIComponent(query)}`, '_blank')
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      const query = input.trim()
-      if (!query) return
-      setInput('')
-      doChat(query)
+      openFullApp(input.trim())
     }
   }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const query = input.trim()
-    if (!query) return
-    setInput('')
-    doChat(query)
+    openFullApp(input.trim())
   }
 
   return (
@@ -312,7 +312,7 @@ export default function EmbedChat() {
                 ].map(s => (
                   <button
                     key={s}
-                    onClick={() => { setInput(s); inputRef.current?.focus() }}
+                    onClick={() => openFullApp(s)}
                     className="block w-full text-left text-sm text-gray-700 py-3 px-3 border-b border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
@@ -417,7 +417,7 @@ export default function EmbedChat() {
                               {msg.suggestions.map((q, j) => (
                                 <button
                                   key={j}
-                                  onClick={() => { setInput(''); doChat(q) }}
+                                  onClick={() => openFullApp(q)}
                                   disabled={loading}
                                   className="text-left text-sm py-2 px-3 border border-gray-200 rounded hover:border-red-300 hover:bg-red-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                                   style={{ fontFamily: 'var(--font-serif)', color: '#374151' }}

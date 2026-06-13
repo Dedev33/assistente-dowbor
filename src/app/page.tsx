@@ -57,6 +57,18 @@ export default function Home() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
+  // Auto-submit when opened from embed via ?q= param
+  const autoSubmittedFromEmbed = useRef(false)
+  useEffect(() => {
+    if (autoSubmittedFromEmbed.current) return
+    const q = new URLSearchParams(window.location.search).get('q')?.trim()
+    if (q) {
+      autoSubmittedFromEmbed.current = true
+      doChat(q)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   async function doChat(query: string) {
     if (!query || loading) return
 
