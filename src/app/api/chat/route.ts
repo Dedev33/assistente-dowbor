@@ -249,7 +249,7 @@ export async function POST(req: NextRequest) {
         send(controller, {
           type: 'done',
           log_id: logId,
-          ...(bookNotAvailable ? { citations: [] } : {}),
+          ...(skipSuggestions ? { citations: [] } : {}),
           latency_ms: {
             embedding: retrievalLatency.embedding,
             retrieval: retrievalLatency.retrieval,
