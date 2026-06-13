@@ -5426,27 +5426,23 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
 
 <script>
 (function() {
-  var done = false;
   var interval = setInterval(function() {
-    if (done) return;
-    var menus = document.querySelectorAll('.elementor-nav-menu.sm-vertical');
-    menus.forEach(function(ul) {
-      var items = Array.from(ul.querySelectorAll('a'));
-      var hasDicas     = items.some(function(a){ return a.textContent.trim() === 'Dicas de Leitura'; });
-      var hasAssistente = items.some(function(a){ return a.textContent.includes('Assistente'); });
-      if (hasDicas && !hasAssistente) {
-        var li = document.createElement('li');
-        li.className = 'menu-item';
-        var a = document.createElement('a');
-        a.href = 'https://assistente-dowbor.vercel.app';
-        a.className = 'elementor-item';
-        a.target = '_blank';
-        a.textContent = 'Assistente IA de Pesquisa';
-        li.appendChild(a);
-        ul.appendChild(li);
-        done = true;
-      }
-    });
+    var widget = document.querySelector('[data-id="54d016d"]');
+    if (!widget) return;
+    if (widget.querySelector('.assistente-link')) { clearInterval(interval); return; }
+    var div = document.createElement('div');
+    div.className = 'assistente-link';
+    div.style.cssText = 'padding:0;margin:0;';
+    var a = document.createElement('a');
+    a.href = 'https://assistente-dowbor.vercel.app';
+    a.target = '_blank';
+    a.textContent = 'Assistente IA de Pesquisa';
+    // Copy computed style from a sibling menu link
+    var ref = widget.querySelector('a.elementor-item');
+    a.className = ref ? ref.className : 'elementor-item';
+    div.appendChild(a);
+    widget.parentNode.insertBefore(div, widget.nextSibling);
+    clearInterval(interval);
   }, 100);
   setTimeout(function(){ clearInterval(interval); }, 8000);
 })();
