@@ -1450,6 +1450,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				<div class="elementor-widget-container">
 			<span class="elementor-heading-title elementor-size-default"><a href="https://dowbor.org/dicas-de-leitura">Dicas de Leitura</a></span>		</div>
 				</div>
+				<div class="elementor-element elementor-element-spacer-ia elementor-widget elementor-widget-spacer" data-id="spacer-ia" data-element_type="widget" data-widget_type="spacer.default">
+				<div class="elementor-widget-container">
+					<div class="elementor-spacer">
+			<div class="elementor-spacer-inner"></div>
+		</div>
+				</div>
+				</div>
+				<div class="elementor-element elementor-element-assistente-ia sublime_effect_red elementor-widget__width-auto elementor-widget elementor-widget-heading" data-id="assistente-ia" data-element_type="widget" data-settings="{&quot;_animation&quot;:&quot;none&quot;}" data-widget_type="heading.default">
+				<div class="elementor-widget-container">
+			<span class="elementor-heading-title elementor-size-default"><a href="https://assistente-dowbor.vercel.app" target="_blank">Assistente IA de Pesquisa</a></span>		</div>
+				</div>
 					</div>
 		</div>
 							</div>
@@ -5424,40 +5435,7 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
 
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"0281d8ae14504021953cd9fbcea85d9d","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 
-<script>
-(function() {
-  function inject(id) {
-    var widget = document.querySelector('[data-id="' + id + '"]');
-    if (!widget || document.getElementById('al-' + id)) return false;
-    var ref = widget.querySelector('a.elementor-item');
-    var refStyle = ref ? window.getComputedStyle(ref) : null;
-    var a = document.createElement('a');
-    a.id = 'al-' + id;
-    a.href = 'https://assistente-dowbor.vercel.app';
-    a.target = '_blank';
-    a.textContent = 'Assistente IA de Pesquisa';
-    a.style.cssText = [
-      'display:block',
-      'font-size:' + (refStyle ? refStyle.fontSize : '48px'),
-      'font-family:' + (refStyle ? refStyle.fontFamily : 'inherit'),
-      'color:' + (refStyle ? refStyle.color : '#000'),
-      'text-decoration:none',
-      'line-height:1.2',
-      'padding:' + (refStyle ? refStyle.padding : '0'),
-      'margin-top:0.15em',
-    ].join(';');
-    widget.parentNode.insertBefore(a, widget.nextSibling);
-    return true;
-  }
-  var done = { '1c8a361': false, '54d016d': false };
-  var iv = setInterval(function() {
-    if (!done['1c8a361']) done['1c8a361'] = inject('1c8a361');
-    if (!done['54d016d']) done['54d016d'] = inject('54d016d');
-    if (done['1c8a361'] && done['54d016d']) clearInterval(iv);
-  }, 100);
-  setTimeout(function(){ clearInterval(iv); }, 8000);
-})();
-</script>
+
 </body>
 
 <!-- Mirrored from dowbor.org/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 12 Jun 2026 15:03:44 GMT -->
