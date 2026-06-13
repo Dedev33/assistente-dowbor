@@ -227,7 +227,7 @@ export async function POST(req: NextRequest) {
           a.includes('contexto não contém') ||
           a.includes('não há informações') ||
           a.includes('não encontrei informações') ||
-          a.includes('fora do escopo') ||
+          a.includes('fora do escopo deste assistente') ||
           a.includes('além do escopo') ||
           a.includes('não consta')
 
