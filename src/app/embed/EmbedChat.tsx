@@ -216,9 +216,9 @@ export default function EmbedChat() {
             DOWBOR.ORG
           </a>
 
-          <div className="flex items-center gap-3 ml-auto">
-            {/* Font size controls */}
-            <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-2 ml-auto">
+            {/* Font size controls — hidden on very small screens */}
+            <div className="hidden xs:flex items-center gap-0.5">
               {([0, 1, 2] as const).map((level, i) => (
                 <span key={level} className="flex items-center">
                   {i > 0 && <span className="text-gray-300 text-xs mx-0.5 select-none">|</span>}
@@ -248,7 +248,7 @@ export default function EmbedChat() {
               Versão completa ↗
             </a>
 
-            {/* Reset button */}
+            {/* Reset button — desktop only */}
             <button
               className="text-xs tracking-widest uppercase text-gray-400 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0 hidden sm:block"
               onClick={() => { setMessages([]); setInput('') }}
