@@ -5426,27 +5426,36 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
 
 <script>
 (function() {
-  var DESKTOP_ID = '1c8a361';
-  var MOBILE_ID  = '54d016d';
-  var interval = setInterval(function() {
-    [DESKTOP_ID, MOBILE_ID].forEach(function(id) {
-      var widget = document.querySelector('[data-id="' + id + '"]');
-      if (!widget) return;
-      if (document.getElementById('assistente-link-' + id)) return;
-      var div = document.createElement('div');
-      div.id = 'assistente-link-' + id;
-      var ref = widget.querySelector('a.elementor-item');
-      var a = document.createElement('a');
-      a.href = 'https://assistente-dowbor.vercel.app';
-      a.target = '_blank';
-      a.textContent = 'Assistente IA de Pesquisa';
-      if (ref) a.className = ref.className;
-      div.appendChild(a);
-      widget.parentNode.insertBefore(div, widget.nextSibling);
-    });
-    if (document.getElementById('assistente-link-' + DESKTOP_ID)) clearInterval(interval);
+  function inject(id) {
+    var widget = document.querySelector('[data-id="' + id + '"]');
+    if (!widget || document.getElementById('al-' + id)) return false;
+    var ref = widget.querySelector('a.elementor-item');
+    var refStyle = ref ? window.getComputedStyle(ref) : null;
+    var a = document.createElement('a');
+    a.id = 'al-' + id;
+    a.href = 'https://assistente-dowbor.vercel.app';
+    a.target = '_blank';
+    a.textContent = 'Assistente IA de Pesquisa';
+    a.style.cssText = [
+      'display:block',
+      'font-size:' + (refStyle ? refStyle.fontSize : '48px'),
+      'font-family:' + (refStyle ? refStyle.fontFamily : 'inherit'),
+      'color:' + (refStyle ? refStyle.color : '#000'),
+      'text-decoration:none',
+      'line-height:1.2',
+      'padding:' + (refStyle ? refStyle.padding : '0'),
+      'margin-top:0.15em',
+    ].join(';');
+    widget.parentNode.insertBefore(a, widget.nextSibling);
+    return true;
+  }
+  var done = { '1c8a361': false, '54d016d': false };
+  var iv = setInterval(function() {
+    if (!done['1c8a361']) done['1c8a361'] = inject('1c8a361');
+    if (!done['54d016d']) done['54d016d'] = inject('54d016d');
+    if (done['1c8a361'] && done['54d016d']) clearInterval(iv);
   }, 100);
-  setTimeout(function(){ clearInterval(interval); }, 8000);
+  setTimeout(function(){ clearInterval(iv); }, 8000);
 })();
 </script>
 </body>
