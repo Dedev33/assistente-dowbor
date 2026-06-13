@@ -5426,14 +5426,15 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
 
 <script>
 (function() {
-  function injectLink() {
-    var injected = false;
-    document.querySelectorAll('.elementor-nav-menu.sm-vertical').forEach(function(ul) {
-      var links = ul.querySelectorAll('a');
-      var hasDicas = Array.from(links).some(function(a) {
-        return a.textContent.trim() === 'Dicas de Leitura';
-      });
-      if (hasDicas && !injected) {
+  var done = false;
+  var interval = setInterval(function() {
+    if (done) return;
+    var menus = document.querySelectorAll('.elementor-nav-menu.sm-vertical');
+    menus.forEach(function(ul) {
+      var items = Array.from(ul.querySelectorAll('a'));
+      var hasDicas     = items.some(function(a){ return a.textContent.trim() === 'Dicas de Leitura'; });
+      var hasAssistente = items.some(function(a){ return a.textContent.includes('Assistente'); });
+      if (hasDicas && !hasAssistente) {
         var li = document.createElement('li');
         li.className = 'menu-item';
         var a = document.createElement('a');
@@ -5443,18 +5444,11 @@ var stratum = {"localeData":{"":{"domain":"stratum","lang":"pt_BR"}},"settings":
         a.textContent = 'Assistente IA de Pesquisa';
         li.appendChild(a);
         ul.appendChild(li);
-        injected = true;
+        done = true;
       }
     });
-  }
-  // Run after all scripts have had a chance to build the menu
-  if (document.readyState === 'complete') {
-    injectLink();
-  } else {
-    window.addEventListener('load', injectLink);
-  }
-  // Fallback: also run after a short delay in case of deferred JS
-  setTimeout(injectLink, 800);
+  }, 100);
+  setTimeout(function(){ clearInterval(interval); }, 8000);
 })();
 </script>
 </body>
