@@ -312,7 +312,7 @@ export default function EmbedChat() {
                 ].map(s => (
                   <button
                     key={s}
-                    onClick={() => openFullApp(s)}
+                    onClick={() => { setInput(s); inputRef.current?.focus() }}
                     className="block w-full text-left text-sm text-gray-700 py-3 px-3 border-b border-gray-200 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                     style={{ fontFamily: 'var(--font-serif)' }}
                   >
