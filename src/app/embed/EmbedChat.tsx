@@ -237,17 +237,6 @@ export default function EmbedChat() {
               ))}
             </div>
 
-            {/* Link to full platform */}
-            <a
-              href={FULL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-gray-500 hover:opacity-70 transition-opacity whitespace-nowrap"
-              title="Abrir versão completa"
-            >
-              Versão completa ↗
-            </a>
-
             {/* Reset button — desktop only */}
             <button
               className="text-xs tracking-widest uppercase text-gray-400 hover:opacity-60 transition-opacity cursor-pointer bg-transparent border-0 p-0 hidden sm:block"
