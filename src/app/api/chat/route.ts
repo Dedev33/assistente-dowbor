@@ -217,6 +217,22 @@ export async function POST(req: NextRequest) {
         // so the UI doesn't show misleading sources from unrelated books.
         const bookNotAvailable = fullAnswer.includes('não está disponível no sistema')
 
+        // Detect when the LLM signals the context didn't have enough content,
+        // even though similarity was above the fallback threshold (weak RAG hit).
+        const a = fullAnswer.toLowerCase()
+        const answerIndicatesNoContent =
+          a.includes('informações suficientes') ||
+          a.includes('não aborda') ||
+          a.includes('não está abordad') ||
+          a.includes('contexto não contém') ||
+          a.includes('não há informações') ||
+          a.includes('não encontrei informações') ||
+          a.includes('fora do escopo') ||
+          a.includes('além do escopo') ||
+          a.includes('não consta')
+
+        const skipSuggestions = bookNotAvailable || answerIndicatesNoContent
+
         const logId = await logSearch({
           query_text: query.trim(),
           book_ids_filter: book_slugs ?? null,
@@ -243,8 +259,10 @@ export async function POST(req: NextRequest) {
           tokens: { embedding: embeddingTokens, llm_input: promptTokens, llm_output: answerTokens },
         })
 
-        // Generate follow-up suggestions after the main answer is done
-        await sendSuggestions(controller, query.trim(), fullAnswer)
+        // Generate follow-up suggestions only when the answer is grounded in the books
+        if (!skipSuggestions) {
+          await sendSuggestions(controller, query.trim(), fullAnswer)
+        }
 
         controller.close()
       } catch (err: any) {
