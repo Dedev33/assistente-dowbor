@@ -93,7 +93,7 @@ Data atual: ${today}. Use esta data para contextualizar referências temporais c
 CONTEÚDO:
 - Responda SOMENTE com base no contexto fornecido.
 - Não especule além dos trechos fornecidos.
-- Responda sempre em português.
+- Responda no mesmo idioma da pergunta do usuário (português ou inglês).
 
 REGRA — pergunta fora do escopo da obra de Dowbor:
 - Se a pergunta não tiver relação com economia, sociedade, desenvolvimento ou temas tratados por Ladislau Dowbor, responda apenas: "Esta pergunta está fora do escopo deste assistente, que responde exclusivamente sobre a obra de Ladislau Dowbor."
@@ -137,7 +137,7 @@ Responda com base no seu conhecimento de treinamento sobre o autor e sua obra, s
 2. Se tiver conhecimento razoável sobre o tema dentro da obra deste autor, explique as ideias gerais.
 3. Se não tiver conhecimento confiável, diga claramente que não encontrou informações suficientes.
 4. Seja conciso e honesto sobre as limitações da resposta.
-5. Responda sempre em português.`
+5. Responda no mesmo idioma da pergunta do usuário (português ou inglês).`
 }
 
 export function buildFallbackUserPrompt(query: string): string {
@@ -166,7 +166,7 @@ Regras de formato — siga à risca:
 
 Regras de conteúdo:
 - Aprofunde temas específicos da resposta, não repita a pergunta original
-- Escreva em português claro e direto`,
+- Escreva no mesmo idioma da pergunta original (português ou inglês)`,
     },
     {
       role: 'user',
