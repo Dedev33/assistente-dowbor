@@ -221,6 +221,7 @@ export async function POST(req: NextRequest) {
         // even though similarity was above the fallback threshold (weak RAG hit).
         const a = fullAnswer.toLowerCase()
         const answerIndicatesNoContent =
+          // Portuguese
           a.includes('informações suficientes') ||
           a.includes('não aborda') ||
           a.includes('não está abordad') ||
@@ -229,7 +230,18 @@ export async function POST(req: NextRequest) {
           a.includes('não encontrei informações') ||
           a.includes('fora do escopo deste assistente') ||
           a.includes('além do escopo') ||
-          a.includes('não consta')
+          a.includes('não consta') ||
+          // English
+          a.includes('out of scope') ||
+          a.includes('outside the scope') ||
+          a.includes('not within the scope') ||
+          a.includes('insufficient information') ||
+          a.includes('not covered') ||
+          // French
+          a.includes('hors du scope') ||
+          a.includes('hors de la portée') ||
+          a.includes('ne couvre pas') ||
+          a.includes('informations insuffisantes')
 
         const skipSuggestions = bookNotAvailable || answerIndicatesNoContent
 
