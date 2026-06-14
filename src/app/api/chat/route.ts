@@ -67,7 +67,7 @@ async function sendSuggestions(
       .filter(l => {
         if (l.length < 15) return false          // too short — likely a fragment
         if (!l.endsWith('?')) return false        // must be a complete question
-        if (!/^[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ]/.test(l)) return false  // must start with capital letter
+        if (!/^\p{Lu}/u.test(l)) return false  // must start with any Unicode uppercase letter
         return true
       })
       .slice(0, 3)

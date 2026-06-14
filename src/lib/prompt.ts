@@ -166,9 +166,8 @@ Based on the question and answer provided, generate exactly 3 follow-up question
 
 LANGUAGE — MANDATORY RULE:
 - Detect the language of the original question.
-- If the original question is in English, write ALL 3 questions in English.
-- If the original question is in Portuguese, write ALL 3 questions in Portuguese.
-- NEVER mix languages.
+- Write ALL 3 questions in that SAME language (Portuguese, English, French, Polish, Spanish, or any other).
+- NEVER mix languages or switch to a different language.
 
 Format rules — follow strictly:
 - One question per line, no numbering, no bullets, no dashes
