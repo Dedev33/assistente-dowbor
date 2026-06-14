@@ -21,6 +21,32 @@ function send(controller: ReadableStreamDefaultController, obj: object) {
   controller.enqueue(encoder.encode(JSON.stringify(obj) + '\n'))
 }
 
+/**
+ * Translate a query to Portuguese for retrieval purposes.
+ * The content corpus is in Portuguese, so translating before embedding
+ * improves cross-lingual similarity scores significantly.
+ * Falls back to the original query if translation fails.
+ */
+async function translateToPt(query: string): Promise<string> {
+  try {
+    const res = await getChatClient().chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+      max_tokens: 200,
+      messages: [
+        {
+          role: 'system',
+          content: 'Translate the user\'s question to Brazilian Portuguese. Output ONLY the translated text, nothing else. If the text is already in Portuguese, output it unchanged.',
+        },
+        { role: 'user', content: query },
+      ],
+    })
+    return res.choices[0]?.message?.content?.trim() || query
+  } catch {
+    return query
+  }
+}
+
 /** Generate 3 follow-up questions and send them as a suggestions event. */
 async function sendSuggestions(
   controller: ReadableStreamDefaultController,
@@ -95,9 +121,12 @@ export async function POST(req: NextRequest) {
           .order('title')
         const bookTitles = (booksData ?? []).map((b: { title: string }) => b.title)
 
-        // 2. Retrieve relevant chunks
+        // 2. Translate query to Portuguese for retrieval (corpus is in Portuguese).
+        // The original query is preserved for the LLM response (which mirrors the user's language).
+        const queryForRetrieval = await translateToPt(query.trim())
+
         const { results, embeddingTokens, latency: retrievalLatency } = await retrieve({
-          query: query.trim(),
+          query: queryForRetrieval,
           bookSlugs: book_slugs,
           topK: top_k ?? 5,
         })
