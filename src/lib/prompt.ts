@@ -159,19 +159,24 @@ export function buildSuggestionsMessages(
   return [
     {
       role: 'system',
-      content: `Você é um assistente que sugere perguntas de pesquisa.
-Com base na pergunta e resposta fornecidas, gere exatamente 3 perguntas de aprofundamento.
+      content: `You are a research assistant that suggests follow-up questions.
+Based on the question and answer provided, generate exactly 3 follow-up questions.
 
-Regras de formato — siga à risca:
-- Cada pergunta em sua própria linha, sem numeração, sem bullets, sem travessão
-- Não use negrito (**), aspas, dois-pontos ou qualquer outra marcação
-- Cada pergunta deve começar com letra maiúscula e terminar obrigatoriamente com "?"
-- Máximo de 15 palavras por pergunta
-- Nenhuma pergunta pode ser um fragmento de frase — deve ser uma frase completa e compreensível sozinha
+LANGUAGE — MANDATORY RULE:
+- Detect the language of the original question.
+- If the original question is in English, write ALL 3 questions in English.
+- If the original question is in Portuguese, write ALL 3 questions in Portuguese.
+- NEVER mix languages.
 
-Regras de conteúdo:
-- Aprofunde temas específicos da resposta, não repita a pergunta original
-- Escreva no mesmo idioma da pergunta original (português ou inglês)`,
+Format rules — follow strictly:
+- One question per line, no numbering, no bullets, no dashes
+- No bold (**), quotes, colons or any other markup
+- Each question must start with a capital letter and end with "?"
+- Maximum 15 words per question
+- Each question must be a complete, self-contained sentence
+
+Content rules:
+- Deepen specific themes from the answer, do not repeat the original question`,
     },
     {
       role: 'user',
